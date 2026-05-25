@@ -27,7 +27,17 @@
     ]
   };
 
+  
+  const COLOR_VERSION = "palette-v3-visible";
+  const defaultColorById = {
+    "mari-jose":"#7c3aed",
+    "bea":"#059669",
+    "marta":"#2563eb",
+    "patri":"#d97706"
+  };
+
   let state = load();
+  migratePalette();
   let selectedDate = new Date();
   selectedDate.setHours(12,0,0,0);
   let currentView = "month";
@@ -40,6 +50,21 @@
 
   function clone(v){ return JSON.parse(JSON.stringify(v)); }
   function uid(prefix="id"){ return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+
+  function migratePalette(){
+    if(localStorage.getItem("agenda-color-version") === COLOR_VERSION) return;
+    let changed = false;
+    state.people.forEach(p=>{
+      if(defaultColorById[p.id]){
+        p.color = defaultColorById[p.id];
+        changed = true;
+      }
+    });
+    localStorage.setItem("agenda-color-version", COLOR_VERSION);
+    if(changed) save();
+  }
+
 
   function load(){
     try{
@@ -315,6 +340,9 @@
 
     cal.innerHTML = `<div class="month-layout">
       <section class="month-board">
+        <div class="legend-row">
+          ${activePeople().map(p=>`<span class="legend-chip"><i class="avatar-dot" style="background:${p.color}"></i>${p.name}</span>`).join("")}
+        </div>
         <div class="month-weekdays">
           ${["L","M","X","J","V","S","D"].map(d=>`<span>${d}</span>`).join("")}
         </div>
@@ -324,7 +352,8 @@
             const today = isSameDay(date,new Date());
             const selected = isSameDay(date,selectedMonthDate);
             const items = monthItemsFor(date);
-            return `<button class="month-day ${out ? "out" : ""} ${today ? "today" : ""} ${selected ? "selected" : ""}" data-select-date="${iso(date)}" type="button">
+            const accent = items[0] ? shiftAccent(items[0].shift,items[0].person) : "#e4e7ec";
+            return `<button class="month-day ${items.length ? "has-items" : ""} ${out ? "out" : ""} ${today ? "today" : ""} ${selected ? "selected" : ""}" style="--accent:${accent}" data-select-date="${iso(date)}" type="button">
               <div class="month-day-head">
                 <span class="month-day-num">${date.getDate()}</span>
                 <span class="month-day-week">${date.toLocaleDateString("es-ES",{weekday:"short"})}</span>
@@ -359,9 +388,8 @@
               </div>
               ${day.items.length ? day.items.map(item=>{
                 const p = item.person;
-                const color = shiftTypeColor(item.shift);
                 const personColor = shiftAccent(item.shift,p);
-                return `<article class="feed-card">
+                return `<article class="feed-card ${item.shift}">
                   <div class="feed-card-line ${item.shift}"></div>
                   <div class="feed-card-body">
                     <div class="feed-shift ${item.shift}">${shiftInitial(item.shift)}</div>
@@ -772,7 +800,7 @@
   function setupMobileTools(){
     const tools = document.querySelector(".agenda-tools");
     if(!tools) return;
-    if(window.matchMedia("(max-width: 760px)").matches){
+    if(window.matchMedia("(max-width: 980px)").matches){
       tools.removeAttribute("open");
     }else{
       tools.setAttribute("open","");
@@ -802,7 +830,7 @@
       selectedMonthDate = new Date(selectedDate);
       renderAgenda();
     });
-    $("#todayBtn")?.addEventListener("click",()=>{ selectedDate = new Date(); selectedDate.setHours(12,0,0,0); renderAgenda(); });
+    $("#todayBtn")?.addEventListener("click",()=>{ selectedDate = new Date(); selectedDate.setHours(12,0,0,0); selectedMonthDate = new Date(selectedDate); renderAgenda(); });
     document.addEventListener("click",e=>{
       const selectDate = e.target.closest("[data-select-date]");
       if(selectDate){ selectedMonthDate = new Date(selectDate.dataset.selectDate + "T12:00:00"); renderAgenda(); return; }
