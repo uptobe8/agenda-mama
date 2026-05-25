@@ -623,3 +623,340 @@ input,select,textarea{
     grid-template-columns:repeat(7,78vw);
   }
 }
+
+
+
+/* FIX HOME TOOLBAR LIMPIA */
+.agenda-home-panel{
+  padding:22px;
+}
+.agenda-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:16px;
+  align-items:center;
+  margin-bottom:14px;
+}
+.agenda-title-block h1{
+  font-size:34px;
+  line-height:1;
+  letter-spacing:-.055em;
+  margin:0 0 6px;
+}
+.agenda-title-block p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  font-weight:750;
+}
+.agenda-nav-controls{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-end;
+}
+.agenda-filterbar{
+  display:grid;
+  grid-template-columns:auto minmax(180px,230px) minmax(190px,260px) auto;
+  gap:10px;
+  align-items:center;
+  margin-bottom:16px;
+}
+.agenda-filterbar .segment{
+  min-width:0;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.agenda-filterbar .segment::-webkit-scrollbar{display:none}
+.agenda-filterbar select{
+  width:100%;
+  min-height:46px;
+  border-radius:999px;
+  background:rgba(255,255,255,.86);
+  font-weight:760;
+}
+.agenda-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:nowrap;
+}
+.agenda-actions .btn{
+  min-height:46px;
+}
+.agenda-actions .btn.danger{
+  background:#fff1f3;
+  color:#b42318;
+  border-color:#ffd6dd;
+}
+#approvalPanel[hidden]{
+  display:none!important;
+}
+@media(max-width:1180px){
+  .agenda-filterbar{
+    grid-template-columns:1fr 1fr;
+  }
+  .agenda-filterbar .segment,
+  .agenda-actions{
+    grid-column:1/-1;
+  }
+  .agenda-actions{
+    justify-content:flex-start;
+    flex-wrap:wrap;
+  }
+}
+@media(max-width:760px){
+  .agenda-home-panel{
+    padding:16px;
+  }
+  .agenda-top{
+    grid-template-columns:1fr;
+  }
+  .agenda-title-block h1{
+    font-size:30px;
+  }
+  .agenda-nav-controls{
+    justify-content:flex-start;
+  }
+  .agenda-filterbar{
+    grid-template-columns:1fr;
+  }
+  .agenda-filterbar .segment{
+    width:100%;
+  }
+  .agenda-filterbar .segment button{
+    flex:0 0 auto;
+  }
+  .agenda-actions .btn{
+    flex:1 1 160px;
+  }
+}
+@media(max-width:420px){
+  .agenda-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+  .agenda-nav-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+
+
+
+/* FIX HAMBURGUESA ÚNICA + HOME MENSUAL */
+.topbar{
+  position:relative!important;
+  top:auto!important;
+}
+.nav{
+  position:relative;
+}
+.nav-links{
+  display:none!important;
+  position:absolute;
+  top:62px;
+  right:18px;
+  left:auto;
+  width:min(320px, calc(100vw - 28px));
+  max-width:min(320px, calc(100vw - 28px));
+  border-radius:24px;
+  padding:10px;
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  z-index:80;
+  overflow:visible;
+}
+.nav-links.open{
+  display:grid!important;
+  gap:4px;
+}
+.nav-links a{
+  display:flex;
+  width:100%;
+  padding:14px 15px;
+  border-radius:16px;
+}
+.menu-btn{
+  display:inline-flex!important;
+}
+.bottom-nav{
+  display:none!important;
+}
+.container{
+  padding-bottom:32px!important;
+}
+.agenda-home-panel{
+  min-height:calc(100dvh - 130px);
+}
+.agenda-filterbar{
+  grid-template-columns:auto minmax(150px,190px) minmax(170px,220px) auto;
+}
+.agenda-actions{
+  justify-content:flex-start;
+}
+.month-grid{
+  grid-template-columns:repeat(7,minmax(132px,1fr));
+  gap:10px;
+  overflow:visible;
+}
+.month-day{
+  min-height:148px;
+}
+.month-shift{
+  cursor:pointer;
+}
+.approval-summary{
+  grid-template-columns:repeat(4,1fr);
+}
+.approval-person{
+  min-height:auto;
+}
+.approval-single-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+@media(min-width:761px){
+  .nav-links{
+    display:none!important;
+  }
+  .nav-links.open{
+    display:grid!important;
+  }
+}
+@media(max-width:1180px){
+  .agenda-filterbar{
+    grid-template-columns:1fr 1fr;
+  }
+  .agenda-filterbar .segment,
+  .agenda-actions{
+    grid-column:1/-1;
+  }
+}
+@media(max-width:760px){
+  .topbar{
+    position:relative!important;
+  }
+  .nav{
+    align-items:center;
+    flex-wrap:nowrap;
+  }
+  .nav-links{
+    top:60px;
+    right:14px;
+    left:14px;
+    width:auto;
+    max-width:none;
+  }
+  .agenda-home-panel{
+    padding:14px;
+  }
+  .agenda-top{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .agenda-title-block h1{
+    font-size:28px;
+  }
+  .agenda-filterbar{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .agenda-filterbar .segment{
+    width:100%;
+    display:flex;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .agenda-filterbar .segment button{
+    white-space:nowrap;
+  }
+  .agenda-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    width:100%;
+  }
+  .agenda-actions .btn{
+    width:100%;
+  }
+  .calendar-panel{
+    padding:10px;
+  }
+  .month-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:9px;
+    overflow:visible;
+  }
+  .month-day{
+    min-height:auto;
+    display:grid;
+    gap:6px;
+    padding:11px;
+  }
+  .month-day.out{
+    display:none;
+  }
+  .month-day-head{
+    margin-bottom:2px;
+    font-size:13px;
+  }
+  .month-shift{
+    margin-bottom:0;
+    min-height:40px;
+  }
+  .approval-single-actions{
+    justify-content:stretch;
+  }
+  .approval-single-actions .btn{
+    width:100%;
+  }
+}
+
+
+
+/* FIX REPARTO HASTA FECHA */
+.inline-date{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:auto;
+  min-height:46px;
+  padding:0 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.86);
+  font-size:13px;
+  font-weight:850;
+  color:var(--muted);
+}
+.inline-date input{
+  min-width:142px;
+  width:142px;
+  padding:0;
+  min-height:auto;
+  border:0;
+  background:transparent;
+  font-weight:850;
+  color:var(--ink);
+}
+.inline-date input:focus{
+  box-shadow:none;
+}
+@media(max-width:760px){
+  .inline-date{
+    width:100%;
+    justify-content:space-between;
+    min-height:46px;
+  }
+  .inline-date input{
+    width:auto;
+    flex:1;
+    text-align:right;
+  }
+}

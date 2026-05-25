@@ -30,7 +30,7 @@
   let state = load();
   let selectedDate = new Date();
   selectedDate.setHours(12,0,0,0);
-  let currentView = "week";
+  let currentView = "month";
   let filterPerson = "all";
   let filterShift = "all";
 
@@ -197,6 +197,7 @@
 
   function renderAgenda(){
     if(!$("#calendar")) return;
+    getFairUntil();
     renderKpis();
     const title = $("#periodTitle");
     if(title){
@@ -421,6 +422,20 @@
     load[p.id] = (load[p.id] || 0) + weight;
   }
 
+
+  function defaultFairUntil(){
+    return new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 0, 12);
+  }
+
+  function getFairUntil(){
+    const input = $("#fairUntil");
+    if(input && !input.value) input.value = iso(defaultFairUntil());
+    const value = input?.value || iso(defaultFairUntil());
+    const d = new Date(value + "T12:00:00");
+    return isNaN(d.getTime()) ? defaultFairUntil() : d;
+  }
+
+
   function buildFairProposal(){
     const people = activePeople();
     if(!people.length){
@@ -429,56 +444,67 @@
     }
 
     const start = startWeek(selectedDate);
+    const end = getFairUntil();
+
+    if(end < start){
+      toast("La fecha final no puede ser anterior al inicio");
+      return;
+    }
+
     const load = Object.fromEntries(people.map(p=>[p.id,0]));
     const items = [];
     const cfg = state.config;
 
-    for(let w=0; w<4; w++){
-      const monday = addDays(start, w*7);
+    const weekendAssigned = new Set();
+
+    for(let cursor = new Date(start); cursor <= end; cursor = addDays(cursor,1)){
+      const d = new Date(cursor);
+      const day = d.getDay();
+      const wi = weekIndex(d);
 
       // Fin de semana del tirón: sábado día + sábado noche + domingo día.
-      const weekendCandidates = (cfg.weekendRotation || people.map(p=>p.id));
-      const weekendPerson = chooseLeast(weekendCandidates, load);
-      const saturday = addDays(monday,5);
-      const sunday = addDays(monday,6);
-      addProposalItem(items, load, saturday, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
-      addProposalItem(items, load, saturday, "noche", weekendPerson, "Fin de semana del tirón · reparto justo", 1.25);
-      addProposalItem(items, load, sunday, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
+      if(day === 6){
+        const weekendKey = iso(d);
+        if(!weekendAssigned.has(weekendKey)){
+          weekendAssigned.add(weekendKey);
+          const weekendPerson = chooseLeast(cfg.weekendRotation || people.map(p=>p.id), load);
+          const sunday = addDays(d,1);
 
-      for(let i=0; i<7; i++){
-        const d = addDays(monday,i);
-        const day = d.getDay();
-
-        // Tardes.
-        if(day === 2 || day === 4){
-          const p = safePerson(cfg.tueThuAfternoon, w+i);
-          addProposalItem(items, load, d, "tarde", p, "Martes y jueves tarde: Mari José", 1);
-        }else if(day === 3){
-          const p = safePerson(cfg.wedAfternoon, w+i);
-          addProposalItem(items, load, d, "tarde", p, "Miércoles tarde: Bea", 1);
-        }else if(day === 1 || day === 5){
-          const p = chooseLeast(cfg.monFriAlternation || people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "tarde", p, "Lunes y viernes tarde · equilibrio Marta/Patri", 1);
-          addProposalItem(items, load, d, "noche", p, "Lunes y viernes duerme quien está de tarde", 1.25);
-          continue;
+          if(d <= end){
+            addProposalItem(items, load, d, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
+            addProposalItem(items, load, d, "noche", weekendPerson, "Fin de semana del tirón · reparto justo", 1.25);
+          }
+          if(sunday <= end){
+            addProposalItem(items, load, sunday, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
+          }
         }
+      }
 
-        // Noches.
-        if(day === 6){
-          // Ya cubierta por fin de semana.
-          continue;
-        }
+      // Tardes.
+      if(day === 2 || day === 4){
+        const p = safePerson(cfg.tueThuAfternoon, wi+day);
+        addProposalItem(items, load, d, "tarde", p, "Martes y jueves tarde: Mari José", 1);
+      }else if(day === 3){
+        const p = safePerson(cfg.wedAfternoon, wi+day);
+        addProposalItem(items, load, d, "tarde", p, "Miércoles tarde: Bea", 1);
+      }else if(day === 1 || day === 5){
+        const p = chooseLeast(cfg.monFriAlternation || people.map(x=>x.id), load);
+        addProposalItem(items, load, d, "tarde", p, "Lunes y viernes tarde · equilibrio Marta/Patri", 1);
+        addProposalItem(items, load, d, "noche", p, "Lunes y viernes duerme quien está de tarde", 1.25);
+        continue;
+      }
 
-        if(day === 0 || day === 2 || day === 4){
-          const p = chooseLeast(cfg.remainingNightRotation || people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "noche", p, "Domingo, martes y jueves noche · reparto justo", 1.25);
-        }else if(day === 3){
-          const p = chooseLeast(people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "noche", p, "Miércoles noche · reparto justo", 1.25);
-        }else if(day === 0 && cfg.everyNightCovered){
-          const p = chooseLeast(people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "noche", p, "Cobertura automática de noche", 1.25);
-        }
+      // Noches.
+      if(day === 6){
+        continue;
+      }
+
+      if(day === 0 || day === 2 || day === 4){
+        const p = chooseLeast(cfg.remainingNightRotation || people.map(x=>x.id), load);
+        addProposalItem(items, load, d, "noche", p, "Domingo, martes y jueves noche · reparto justo", 1.25);
+      }else if(day === 3){
+        const p = chooseLeast(people.map(x=>x.id), load);
+        addProposalItem(items, load, d, "noche", p, "Miércoles noche · reparto justo", 1.25);
       }
     }
 
@@ -486,15 +512,15 @@
       id: uid("proposal"),
       createdAt: new Date().toISOString(),
       startDate: iso(start),
-      weeks: 4,
+      endDate: iso(end),
       status: "pending",
-      approvals: Object.fromEntries(people.map(p=>[p.id,"pending"])),
+      approvals: {},
       items
     };
     save();
     renderAgenda();
     renderApprovalPanel();
-    toast("Propuesta generada. Falta aprobación del equipo.");
+    toast("Reparto generado hasta " + iso(end));
   }
 
   function proposalCounts(){
@@ -514,49 +540,34 @@
 
     const proposal = state.proposal;
     if(!proposal){
-      el.innerHTML = `
-        <div class="panel-head">
-          <div>
-            <h2>Reparto justo y aprobación</h2>
-            <p>Genera una propuesta equilibrada de 4 semanas. No será definitiva hasta que todo el equipo la apruebe.</p>
-          </div>
-          <button class="btn dark" data-fair-distribute type="button">Repartir justo</button>
-        </div>
-        <div class="notice">Sin propuesta activa.</div>`;
+      el.hidden = true;
+      el.innerHTML = "";
       return;
     }
 
+    el.hidden = false;
+
     const counts = proposalCounts();
     const people = activePeople();
-    const allApproved = people.length > 0 && people.every(p => proposal.approvals[p.id] === "approved");
-    const rejected = people.some(p => proposal.approvals[p.id] === "rejected");
 
     el.innerHTML = `
       <div class="panel-head">
         <div>
-          <h2>Propuesta de reparto justo</h2>
-          <p>Periodo: ${proposal.startDate} · ${proposal.weeks} semanas · ${proposal.items.length} turnos. Estado: <strong>${proposal.status === "definitive" ? "Definitivo" : rejected ? "Rechazado por revisar" : allApproved ? "Aprobado por todos" : "Pendiente de aprobación"}</strong></p>
+          <h2>Reparto generado</h2>
+          <p>Periodo: ${proposal.startDate} — ${proposal.endDate || ""} · ${proposal.items.length} turnos. Revisa el reparto y apruébalo para aplicarlo al calendario.</p>
         </div>
-        <div class="toolbar">
+        <div class="approval-single-actions">
+          <button class="btn primary" data-commit-proposal type="button">Aprobar reparto</button>
           <button class="btn dark" data-fair-distribute type="button">Recalcular</button>
-          <button class="btn primary" data-commit-proposal type="button" ${allApproved && !rejected ? "" : "disabled"}>Poner definitivo</button>
-          <button class="btn danger" data-clear-proposal type="button">Eliminar propuesta</button>
+          <button class="btn danger" data-clear-proposal type="button">Eliminar</button>
         </div>
       </div>
 
       <div class="approval-summary">
         ${people.map(p=>{
-          const status = proposal.approvals[p.id] || "pending";
-          const statusClass = status === "approved" ? "approval-status-ok" : status === "rejected" ? "approval-status-no" : "approval-status-wait";
-          const label = status === "approved" ? "Aprobado" : status === "rejected" ? "Rechazado" : "Pendiente";
           return `<div class="approval-person">
             <b><i class="avatar-dot" style="background:${p.color}"></i> ${p.name}</b>
             <small>${counts[p.id] || 0} turnos asignados</small>
-            <span class="badge ${statusClass}">${label}</span>
-            <div class="approval-actions">
-              <button class="btn small primary" data-approve="${p.id}" type="button">Aprobar</button>
-              <button class="btn small danger" data-reject="${p.id}" type="button">Rechazar</button>
-            </div>
           </div>`;
         }).join("")}
       </div>
@@ -585,20 +596,15 @@
   function commitProposal(){
     const p = state.proposal;
     if(!p) return;
-    const people = activePeople();
-    const allApproved = people.length > 0 && people.every(x => p.approvals[x.id] === "approved");
-    if(!allApproved){
-      toast("Faltan aprobaciones del equipo");
-      return;
-    }
     p.items.forEach(item=>{
       state.manual[`${item.date}:${item.shift}`] = item.personId;
     });
     p.status = "definitive";
+    state.proposal = null;
     save();
     renderAgenda();
     renderApprovalPanel();
-    toast("Reparto definitivo aplicado");
+    toast("Reparto aprobado y aplicado");
   }
 
   function clearProposal(){
@@ -658,12 +664,6 @@
 
       const fair = e.target.closest("[data-fair-distribute]");
       if(fair){ buildFairProposal(); return; }
-
-      const approve = e.target.closest("[data-approve]");
-      if(approve){ approveProposal(approve.dataset.approve, "approved"); return; }
-
-      const reject = e.target.closest("[data-reject]");
-      if(reject){ approveProposal(reject.dataset.reject, "rejected"); return; }
 
       const commit = e.target.closest("[data-commit-proposal]");
       if(commit){ commitProposal(); return; }

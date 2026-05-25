@@ -640,6 +640,343 @@ input,select,textarea{
   }
 }
 
+
+
+/* FIX HOME TOOLBAR LIMPIA */
+.agenda-home-panel{
+  padding:22px;
+}
+.agenda-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:16px;
+  align-items:center;
+  margin-bottom:14px;
+}
+.agenda-title-block h1{
+  font-size:34px;
+  line-height:1;
+  letter-spacing:-.055em;
+  margin:0 0 6px;
+}
+.agenda-title-block p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  font-weight:750;
+}
+.agenda-nav-controls{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-end;
+}
+.agenda-filterbar{
+  display:grid;
+  grid-template-columns:auto minmax(180px,230px) minmax(190px,260px) auto;
+  gap:10px;
+  align-items:center;
+  margin-bottom:16px;
+}
+.agenda-filterbar .segment{
+  min-width:0;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.agenda-filterbar .segment::-webkit-scrollbar{display:none}
+.agenda-filterbar select{
+  width:100%;
+  min-height:46px;
+  border-radius:999px;
+  background:rgba(255,255,255,.86);
+  font-weight:760;
+}
+.agenda-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:nowrap;
+}
+.agenda-actions .btn{
+  min-height:46px;
+}
+.agenda-actions .btn.danger{
+  background:#fff1f3;
+  color:#b42318;
+  border-color:#ffd6dd;
+}
+#approvalPanel[hidden]{
+  display:none!important;
+}
+@media(max-width:1180px){
+  .agenda-filterbar{
+    grid-template-columns:1fr 1fr;
+  }
+  .agenda-filterbar .segment,
+  .agenda-actions{
+    grid-column:1/-1;
+  }
+  .agenda-actions{
+    justify-content:flex-start;
+    flex-wrap:wrap;
+  }
+}
+@media(max-width:760px){
+  .agenda-home-panel{
+    padding:16px;
+  }
+  .agenda-top{
+    grid-template-columns:1fr;
+  }
+  .agenda-title-block h1{
+    font-size:30px;
+  }
+  .agenda-nav-controls{
+    justify-content:flex-start;
+  }
+  .agenda-filterbar{
+    grid-template-columns:1fr;
+  }
+  .agenda-filterbar .segment{
+    width:100%;
+  }
+  .agenda-filterbar .segment button{
+    flex:0 0 auto;
+  }
+  .agenda-actions .btn{
+    flex:1 1 160px;
+  }
+}
+@media(max-width:420px){
+  .agenda-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+  .agenda-nav-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+
+
+
+/* FIX HAMBURGUESA ÚNICA + HOME MENSUAL */
+.topbar{
+  position:relative!important;
+  top:auto!important;
+}
+.nav{
+  position:relative;
+}
+.nav-links{
+  display:none!important;
+  position:absolute;
+  top:62px;
+  right:18px;
+  left:auto;
+  width:min(320px, calc(100vw - 28px));
+  max-width:min(320px, calc(100vw - 28px));
+  border-radius:24px;
+  padding:10px;
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  z-index:80;
+  overflow:visible;
+}
+.nav-links.open{
+  display:grid!important;
+  gap:4px;
+}
+.nav-links a{
+  display:flex;
+  width:100%;
+  padding:14px 15px;
+  border-radius:16px;
+}
+.menu-btn{
+  display:inline-flex!important;
+}
+.bottom-nav{
+  display:none!important;
+}
+.container{
+  padding-bottom:32px!important;
+}
+.agenda-home-panel{
+  min-height:calc(100dvh - 130px);
+}
+.agenda-filterbar{
+  grid-template-columns:auto minmax(150px,190px) minmax(170px,220px) auto;
+}
+.agenda-actions{
+  justify-content:flex-start;
+}
+.month-grid{
+  grid-template-columns:repeat(7,minmax(132px,1fr));
+  gap:10px;
+  overflow:visible;
+}
+.month-day{
+  min-height:148px;
+}
+.month-shift{
+  cursor:pointer;
+}
+.approval-summary{
+  grid-template-columns:repeat(4,1fr);
+}
+.approval-person{
+  min-height:auto;
+}
+.approval-single-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+@media(min-width:761px){
+  .nav-links{
+    display:none!important;
+  }
+  .nav-links.open{
+    display:grid!important;
+  }
+}
+@media(max-width:1180px){
+  .agenda-filterbar{
+    grid-template-columns:1fr 1fr;
+  }
+  .agenda-filterbar .segment,
+  .agenda-actions{
+    grid-column:1/-1;
+  }
+}
+@media(max-width:760px){
+  .topbar{
+    position:relative!important;
+  }
+  .nav{
+    align-items:center;
+    flex-wrap:nowrap;
+  }
+  .nav-links{
+    top:60px;
+    right:14px;
+    left:14px;
+    width:auto;
+    max-width:none;
+  }
+  .agenda-home-panel{
+    padding:14px;
+  }
+  .agenda-top{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .agenda-title-block h1{
+    font-size:28px;
+  }
+  .agenda-filterbar{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .agenda-filterbar .segment{
+    width:100%;
+    display:flex;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .agenda-filterbar .segment button{
+    white-space:nowrap;
+  }
+  .agenda-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    width:100%;
+  }
+  .agenda-actions .btn{
+    width:100%;
+  }
+  .calendar-panel{
+    padding:10px;
+  }
+  .month-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:9px;
+    overflow:visible;
+  }
+  .month-day{
+    min-height:auto;
+    display:grid;
+    gap:6px;
+    padding:11px;
+  }
+  .month-day.out{
+    display:none;
+  }
+  .month-day-head{
+    margin-bottom:2px;
+    font-size:13px;
+  }
+  .month-shift{
+    margin-bottom:0;
+    min-height:40px;
+  }
+  .approval-single-actions{
+    justify-content:stretch;
+  }
+  .approval-single-actions .btn{
+    width:100%;
+  }
+}
+
+
+
+/* FIX REPARTO HASTA FECHA */
+.inline-date{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:auto;
+  min-height:46px;
+  padding:0 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.86);
+  font-size:13px;
+  font-weight:850;
+  color:var(--muted);
+}
+.inline-date input{
+  min-width:142px;
+  width:142px;
+  padding:0;
+  min-height:auto;
+  border:0;
+  background:transparent;
+  font-weight:850;
+  color:var(--ink);
+}
+.inline-date input:focus{
+  box-shadow:none;
+}
+@media(max-width:760px){
+  .inline-date{
+    width:100%;
+    justify-content:space-between;
+    min-height:46px;
+  }
+  .inline-date input{
+    width:auto;
+    flex:1;
+    text-align:right;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -658,52 +995,57 @@ input,select,textarea{
   </header>
   <main class="container">
     
-<section class="panel">
-  <div class="home-agenda-head">
-    <div>
-      <h2>Agenda</h2>
+<section class="panel agenda-home-panel">
+  <div class="agenda-top">
+    <div class="agenda-title-block">
+      <h1>Agenda</h1>
       <p id="periodTitle">Semana</p>
     </div>
-    <div class="home-filters">
-      <div class="segment">
-        <button class="view-btn active" data-view="week" type="button">Semana</button>
-        <button class="view-btn" data-view="day" type="button">Día</button>
-        <button class="view-btn" data-view="list" type="button">Lista</button>
-        <button class="view-btn" data-view="month" type="button">Mes</button>
-        <button class="view-btn" data-view="year" type="button">Anual</button>
-      </div>
-      <select id="personFilter" aria-label="Filtrar por persona">
-        <option value="all">Todas</option>
-        <option value="mari-jose">Mari José</option>
-        <option value="bea">Bea</option>
-        <option value="marta">Marta</option>
-        <option value="patri">Patri</option>
-      </select>
-      <select id="shiftFilter" aria-label="Filtrar por turno">
-        <option value="all">Todos los turnos</option>
-        <option value="dia">Día</option>
-        <option value="tarde">Tarde</option>
-        <option value="noche">Noche</option>
-      </select>
-      <button class="btn" data-apply-variables type="button">Aplicar variables</button>
-      <button class="btn dark" data-fair-distribute type="button">Repartir justo</button>
-      <button class="btn danger" data-clear-calendar type="button">Borrar calendario</button>
-    </div>
-  </div>
-  <div class="toolbar" style="margin-bottom:14px">
-    <div class="date-control">
+    <div class="agenda-nav-controls">
       <button class="btn small" id="prevPeriod" type="button">←</button>
       <button class="btn small" id="todayBtn" type="button">Hoy</button>
       <button class="btn small" id="nextPeriod" type="button">→</button>
     </div>
   </div>
+
+  <div class="agenda-filterbar">
+    <div class="segment">
+      <button class="view-btn" data-view="week" type="button">Semana</button>
+      <button class="view-btn" data-view="day" type="button">Día</button>
+      <button class="view-btn" data-view="list" type="button">Lista</button>
+      <button class="view-btn active" data-view="month" type="button">Mes</button>
+      <button class="view-btn" data-view="year" type="button">Anual</button>
+    </div>
+
+    <select id="personFilter" aria-label="Filtrar por persona">
+      <option value="all">Todas</option>
+      <option value="mari-jose">Mari José</option>
+      <option value="bea">Bea</option>
+      <option value="marta">Marta</option>
+      <option value="patri">Patri</option>
+    </select>
+
+    <select id="shiftFilter" aria-label="Filtrar por turno">
+      <option value="all">Todos los turnos</option>
+      <option value="dia">Día</option>
+      <option value="tarde">Tarde</option>
+      <option value="noche">Noche</option>
+    </select>
+
+    <div class="agenda-actions">
+      <button class="btn" data-apply-variables type="button">Aplicar variables</button>
+      <label class="inline-date">Hasta <input id="fairUntil" type="date"></label>
+      <button class="btn dark" data-fair-distribute type="button">Repartir justo</button>
+      <button class="btn danger" data-clear-calendar type="button">Borrar calendario</button>
+    </div>
+  </div>
+
   <div class="calendar-panel" id="calendar"></div>
 </section>
 
-<section class="panel approval-panel" id="approvalPanel"></section>
+<section class="panel approval-panel" id="approvalPanel" hidden></section>
 
   </main>
-  <nav class="bottom-nav" aria-label="Navegación móvil"><a class="active" href="index.html">Agenda</a><a class="" href="variables.html">Variables</a><a class="" href="personas.html">Personas</a></nav>
 </div>
 <script>
 
@@ -738,7 +1080,7 @@ input,select,textarea{
   let state = load();
   let selectedDate = new Date();
   selectedDate.setHours(12,0,0,0);
-  let currentView = "week";
+  let currentView = "month";
   let filterPerson = "all";
   let filterShift = "all";
 
@@ -905,6 +1247,7 @@ input,select,textarea{
 
   function renderAgenda(){
     if(!$("#calendar")) return;
+    getFairUntil();
     renderKpis();
     const title = $("#periodTitle");
     if(title){
@@ -1129,6 +1472,20 @@ input,select,textarea{
     load[p.id] = (load[p.id] || 0) + weight;
   }
 
+
+  function defaultFairUntil(){
+    return new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 0, 12);
+  }
+
+  function getFairUntil(){
+    const input = $("#fairUntil");
+    if(input && !input.value) input.value = iso(defaultFairUntil());
+    const value = input?.value || iso(defaultFairUntil());
+    const d = new Date(value + "T12:00:00");
+    return isNaN(d.getTime()) ? defaultFairUntil() : d;
+  }
+
+
   function buildFairProposal(){
     const people = activePeople();
     if(!people.length){
@@ -1137,56 +1494,67 @@ input,select,textarea{
     }
 
     const start = startWeek(selectedDate);
+    const end = getFairUntil();
+
+    if(end < start){
+      toast("La fecha final no puede ser anterior al inicio");
+      return;
+    }
+
     const load = Object.fromEntries(people.map(p=>[p.id,0]));
     const items = [];
     const cfg = state.config;
 
-    for(let w=0; w<4; w++){
-      const monday = addDays(start, w*7);
+    const weekendAssigned = new Set();
+
+    for(let cursor = new Date(start); cursor <= end; cursor = addDays(cursor,1)){
+      const d = new Date(cursor);
+      const day = d.getDay();
+      const wi = weekIndex(d);
 
       // Fin de semana del tirón: sábado día + sábado noche + domingo día.
-      const weekendCandidates = (cfg.weekendRotation || people.map(p=>p.id));
-      const weekendPerson = chooseLeast(weekendCandidates, load);
-      const saturday = addDays(monday,5);
-      const sunday = addDays(monday,6);
-      addProposalItem(items, load, saturday, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
-      addProposalItem(items, load, saturday, "noche", weekendPerson, "Fin de semana del tirón · reparto justo", 1.25);
-      addProposalItem(items, load, sunday, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
+      if(day === 6){
+        const weekendKey = iso(d);
+        if(!weekendAssigned.has(weekendKey)){
+          weekendAssigned.add(weekendKey);
+          const weekendPerson = chooseLeast(cfg.weekendRotation || people.map(p=>p.id), load);
+          const sunday = addDays(d,1);
 
-      for(let i=0; i<7; i++){
-        const d = addDays(monday,i);
-        const day = d.getDay();
-
-        // Tardes.
-        if(day === 2 || day === 4){
-          const p = safePerson(cfg.tueThuAfternoon, w+i);
-          addProposalItem(items, load, d, "tarde", p, "Martes y jueves tarde: Mari José", 1);
-        }else if(day === 3){
-          const p = safePerson(cfg.wedAfternoon, w+i);
-          addProposalItem(items, load, d, "tarde", p, "Miércoles tarde: Bea", 1);
-        }else if(day === 1 || day === 5){
-          const p = chooseLeast(cfg.monFriAlternation || people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "tarde", p, "Lunes y viernes tarde · equilibrio Marta/Patri", 1);
-          addProposalItem(items, load, d, "noche", p, "Lunes y viernes duerme quien está de tarde", 1.25);
-          continue;
+          if(d <= end){
+            addProposalItem(items, load, d, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
+            addProposalItem(items, load, d, "noche", weekendPerson, "Fin de semana del tirón · reparto justo", 1.25);
+          }
+          if(sunday <= end){
+            addProposalItem(items, load, sunday, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
+          }
         }
+      }
 
-        // Noches.
-        if(day === 6){
-          // Ya cubierta por fin de semana.
-          continue;
-        }
+      // Tardes.
+      if(day === 2 || day === 4){
+        const p = safePerson(cfg.tueThuAfternoon, wi+day);
+        addProposalItem(items, load, d, "tarde", p, "Martes y jueves tarde: Mari José", 1);
+      }else if(day === 3){
+        const p = safePerson(cfg.wedAfternoon, wi+day);
+        addProposalItem(items, load, d, "tarde", p, "Miércoles tarde: Bea", 1);
+      }else if(day === 1 || day === 5){
+        const p = chooseLeast(cfg.monFriAlternation || people.map(x=>x.id), load);
+        addProposalItem(items, load, d, "tarde", p, "Lunes y viernes tarde · equilibrio Marta/Patri", 1);
+        addProposalItem(items, load, d, "noche", p, "Lunes y viernes duerme quien está de tarde", 1.25);
+        continue;
+      }
 
-        if(day === 0 || day === 2 || day === 4){
-          const p = chooseLeast(cfg.remainingNightRotation || people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "noche", p, "Domingo, martes y jueves noche · reparto justo", 1.25);
-        }else if(day === 3){
-          const p = chooseLeast(people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "noche", p, "Miércoles noche · reparto justo", 1.25);
-        }else if(day === 0 && cfg.everyNightCovered){
-          const p = chooseLeast(people.map(x=>x.id), load);
-          addProposalItem(items, load, d, "noche", p, "Cobertura automática de noche", 1.25);
-        }
+      // Noches.
+      if(day === 6){
+        continue;
+      }
+
+      if(day === 0 || day === 2 || day === 4){
+        const p = chooseLeast(cfg.remainingNightRotation || people.map(x=>x.id), load);
+        addProposalItem(items, load, d, "noche", p, "Domingo, martes y jueves noche · reparto justo", 1.25);
+      }else if(day === 3){
+        const p = chooseLeast(people.map(x=>x.id), load);
+        addProposalItem(items, load, d, "noche", p, "Miércoles noche · reparto justo", 1.25);
       }
     }
 
@@ -1194,15 +1562,15 @@ input,select,textarea{
       id: uid("proposal"),
       createdAt: new Date().toISOString(),
       startDate: iso(start),
-      weeks: 4,
+      endDate: iso(end),
       status: "pending",
-      approvals: Object.fromEntries(people.map(p=>[p.id,"pending"])),
+      approvals: {},
       items
     };
     save();
     renderAgenda();
     renderApprovalPanel();
-    toast("Propuesta generada. Falta aprobación del equipo.");
+    toast("Reparto generado hasta " + iso(end));
   }
 
   function proposalCounts(){
@@ -1222,49 +1590,34 @@ input,select,textarea{
 
     const proposal = state.proposal;
     if(!proposal){
-      el.innerHTML = `
-        <div class="panel-head">
-          <div>
-            <h2>Reparto justo y aprobación</h2>
-            <p>Genera una propuesta equilibrada de 4 semanas. No será definitiva hasta que todo el equipo la apruebe.</p>
-          </div>
-          <button class="btn dark" data-fair-distribute type="button">Repartir justo</button>
-        </div>
-        <div class="notice">Sin propuesta activa.</div>`;
+      el.hidden = true;
+      el.innerHTML = "";
       return;
     }
 
+    el.hidden = false;
+
     const counts = proposalCounts();
     const people = activePeople();
-    const allApproved = people.length > 0 && people.every(p => proposal.approvals[p.id] === "approved");
-    const rejected = people.some(p => proposal.approvals[p.id] === "rejected");
 
     el.innerHTML = `
       <div class="panel-head">
         <div>
-          <h2>Propuesta de reparto justo</h2>
-          <p>Periodo: ${proposal.startDate} · ${proposal.weeks} semanas · ${proposal.items.length} turnos. Estado: <strong>${proposal.status === "definitive" ? "Definitivo" : rejected ? "Rechazado por revisar" : allApproved ? "Aprobado por todos" : "Pendiente de aprobación"}</strong></p>
+          <h2>Reparto generado</h2>
+          <p>Periodo: ${proposal.startDate} — ${proposal.endDate || ""} · ${proposal.items.length} turnos. Revisa el reparto y apruébalo para aplicarlo al calendario.</p>
         </div>
-        <div class="toolbar">
+        <div class="approval-single-actions">
+          <button class="btn primary" data-commit-proposal type="button">Aprobar reparto</button>
           <button class="btn dark" data-fair-distribute type="button">Recalcular</button>
-          <button class="btn primary" data-commit-proposal type="button" ${allApproved && !rejected ? "" : "disabled"}>Poner definitivo</button>
-          <button class="btn danger" data-clear-proposal type="button">Eliminar propuesta</button>
+          <button class="btn danger" data-clear-proposal type="button">Eliminar</button>
         </div>
       </div>
 
       <div class="approval-summary">
         ${people.map(p=>{
-          const status = proposal.approvals[p.id] || "pending";
-          const statusClass = status === "approved" ? "approval-status-ok" : status === "rejected" ? "approval-status-no" : "approval-status-wait";
-          const label = status === "approved" ? "Aprobado" : status === "rejected" ? "Rechazado" : "Pendiente";
           return `<div class="approval-person">
             <b><i class="avatar-dot" style="background:${p.color}"></i> ${p.name}</b>
             <small>${counts[p.id] || 0} turnos asignados</small>
-            <span class="badge ${statusClass}">${label}</span>
-            <div class="approval-actions">
-              <button class="btn small primary" data-approve="${p.id}" type="button">Aprobar</button>
-              <button class="btn small danger" data-reject="${p.id}" type="button">Rechazar</button>
-            </div>
           </div>`;
         }).join("")}
       </div>
@@ -1293,20 +1646,15 @@ input,select,textarea{
   function commitProposal(){
     const p = state.proposal;
     if(!p) return;
-    const people = activePeople();
-    const allApproved = people.length > 0 && people.every(x => p.approvals[x.id] === "approved");
-    if(!allApproved){
-      toast("Faltan aprobaciones del equipo");
-      return;
-    }
     p.items.forEach(item=>{
       state.manual[`${item.date}:${item.shift}`] = item.personId;
     });
     p.status = "definitive";
+    state.proposal = null;
     save();
     renderAgenda();
     renderApprovalPanel();
-    toast("Reparto definitivo aplicado");
+    toast("Reparto aprobado y aplicado");
   }
 
   function clearProposal(){
@@ -1366,12 +1714,6 @@ input,select,textarea{
 
       const fair = e.target.closest("[data-fair-distribute]");
       if(fair){ buildFairProposal(); return; }
-
-      const approve = e.target.closest("[data-approve]");
-      if(approve){ approveProposal(approve.dataset.approve, "approved"); return; }
-
-      const reject = e.target.closest("[data-reject]");
-      if(reject){ approveProposal(reject.dataset.reject, "rejected"); return; }
 
       const commit = e.target.closest("[data-commit-proposal]");
       if(commit){ commitProposal(); return; }
