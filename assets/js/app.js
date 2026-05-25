@@ -200,9 +200,24 @@
       <div class="kpi"><span>Alertas</span><strong>${conflicts}</strong><small>revisar</small></div>`;
   }
 
+  function syncPersonFilter(){
+    const select = $("#personFilter");
+    if(!select) return;
+    const current = select.value || filterPerson || "all";
+    select.innerHTML = `<option value="all">Todas</option>` + state.people.map(p=>`<option value="${p.id}">${p.name}</option>`).join("");
+    if([...select.options].some(o=>o.value===current)){
+      select.value = current;
+      filterPerson = current;
+    }else{
+      select.value = "all";
+      filterPerson = "all";
+    }
+  }
+
   function renderAgenda(){
     if(!$("#calendar")) return;
-    getFairUntil();
+    syncPersonFilter();
+    setFairDateDefaults();
     renderKpis();
     const title = $("#periodTitle");
     if(title){
@@ -270,7 +285,11 @@
           if(filterPerson !== "all" && (!item.person || item.person.id !== filterPerson)) return "";
           const cls = item.shift === "noche" ? "noche" : item.shift === "dia" ? "dia" : "tarde";
           const label = item.shift === "dia" ? "D" : item.shift === "tarde" ? "T" : "N";
-          return `<button class="month-shift ${cls}" data-override="${iso(date)}:${item.shift}" type="button"><span>${label}</span><b>${item.person ? item.person.name : "Sin cubrir"}</b></button>`;
+          const p = item.person;
+          return `<button class="month-shift ${cls}" data-override="${iso(date)}:${item.shift}" type="button">
+            <span>${label}</span>
+            <span class="person-mini">${p ? `<i class="avatar-dot" style="background:${p.color}"></i><b>${p.name}</b>` : `<b>Sin cubrir</b>`}</span>
+          </button>`;
         }).join("");
         return `<section class="month-day ${out ? "out" : ""}">
           <div class="month-day-head"><b>${date.getDate()}</b><span>${date.toLocaleDateString("es-ES",{weekday:"short"})}</span></div>
@@ -366,9 +385,13 @@
       <article class="card person-card">
         <div class="person-info">
           <div class="person-avatar" style="background:${p.color}">${initials(p.name)}</div>
-          <div><h3>${p.name}</h3><span class="badge ${p.blocked?"blocked":""}">${p.blocked?"Bloqueada":"Activa"}</span></div>
+          <div>
+            <h3>${p.name}</h3>
+            <span class="badge ${p.blocked?"blocked":""}">${p.blocked?"Bloqueada":"Activa"}</span>
+          </div>
         </div>
         <div class="toolbar">
+          <label class="person-color-row">Color <input type="color" value="${p.color || "#3657ff"}" data-person-color="${p.id}"></label>
           <button class="btn small" data-toggle-person="${p.id}">${p.blocked?"Desbloquear":"Bloquear"}</button>
           <button class="btn small danger" data-delete-person="${p.id}">Eliminar</button>
         </div>
@@ -429,6 +452,27 @@
   }
 
 
+  function defaultFairFrom(){
+    const d = new Date(selectedDate);
+    d.setHours(12,0,0,0);
+    return d;
+  }
+
+  function getFairFrom(){
+    const input = $("#fairFrom");
+    if(input && !input.value) input.value = iso(defaultFairFrom());
+    const value = input?.value || iso(defaultFairFrom());
+    const d = new Date(value + "T12:00:00");
+    return isNaN(d.getTime()) ? defaultFairFrom() : d;
+  }
+
+  function setFairDateDefaults(){
+    const from = $("#fairFrom");
+    const until = $("#fairUntil");
+    if(from && !from.value) from.value = iso(defaultFairFrom());
+    if(until && !until.value) until.value = iso(defaultFairUntil());
+  }
+
   function defaultFairUntil(){
     return new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 0, 12);
   }
@@ -450,7 +494,7 @@
       return;
     }
 
-    const start = startWeek(selectedDate);
+    const start = getFairFrom();
     const end = getFairUntil();
 
     if(end < start){
@@ -461,7 +505,6 @@
     const load = Object.fromEntries(people.map(p=>[p.id,0]));
     const items = [];
     const cfg = state.config;
-
     const weekendAssigned = new Set();
 
     for(let cursor = new Date(start); cursor <= end; cursor = addDays(cursor,1)){
@@ -469,7 +512,6 @@
       const day = d.getDay();
       const wi = weekIndex(d);
 
-      // Fin de semana del tirón: sábado día + sábado noche + domingo día.
       if(day === 6){
         const weekendKey = iso(d);
         if(!weekendAssigned.has(weekendKey)){
@@ -477,17 +519,16 @@
           const weekendPerson = chooseLeast(cfg.weekendRotation || people.map(p=>p.id), load);
           const sunday = addDays(d,1);
 
-          if(d <= end){
+          if(d >= start && d <= end){
             addProposalItem(items, load, d, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
             addProposalItem(items, load, d, "noche", weekendPerson, "Fin de semana del tirón · reparto justo", 1.25);
           }
-          if(sunday <= end){
+          if(sunday >= start && sunday <= end){
             addProposalItem(items, load, sunday, "dia", weekendPerson, "Fin de semana del tirón · reparto justo", 1);
           }
         }
       }
 
-      // Tardes.
       if(day === 2 || day === 4){
         const p = safePerson(cfg.tueThuAfternoon, wi+day);
         addProposalItem(items, load, d, "tarde", p, "Martes y jueves tarde: Mari José", 1);
@@ -501,7 +542,6 @@
         continue;
       }
 
-      // Noches.
       if(day === 6){
         continue;
       }
@@ -527,7 +567,7 @@
     save();
     renderAgenda();
     renderApprovalPanel();
-    toast("Reparto generado hasta " + iso(end));
+    toast("Reparto generado");
   }
 
   function proposalCounts(){
@@ -716,6 +756,19 @@
       state.rulesEnabled = true;
       save(); f.reset(); renderAll(); toast("Variable añadida");
     });
+    
+    document.addEventListener("input",e=>{
+      const color = e.target.closest("[data-person-color]");
+      if(color){
+        const p = state.people.find(x=>x.id===color.dataset.personColor);
+        if(p){
+          p.color = color.value;
+          save();
+          renderAll();
+        }
+      }
+    });
+
     $("#personForm")?.addEventListener("submit",addPerson);
     $("#resetAll")?.addEventListener("click",resetAll);
     $("#exportJson")?.addEventListener("click",exportJson);

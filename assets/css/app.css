@@ -960,3 +960,82 @@ input,select,textarea{
     text-align:right;
   }
 }
+
+
+
+/* FIX INICIO/FIN REPARTO + COLORES PERSONAS */
+.inline-date-group{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.inline-date{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:auto;
+  min-height:46px;
+  padding:0 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.86);
+  font-size:13px;
+  font-weight:850;
+  color:var(--muted);
+}
+.inline-date input{
+  min-width:142px;
+  width:142px;
+  padding:0;
+  min-height:auto;
+  border:0;
+  background:transparent;
+  font-weight:850;
+  color:var(--ink);
+}
+.inline-date input:focus{
+  box-shadow:none;
+}
+.person-color-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.person-color-row input[type="color"],
+.person-card input[type="color"]{
+  width:52px;
+  height:42px;
+  padding:3px;
+  border-radius:14px;
+  cursor:pointer;
+  background:#fff;
+}
+.month-shift .person-mini{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
+.month-shift .person-mini b{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+@media(max-width:760px){
+  .inline-date-group{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr;
+  }
+  .inline-date{
+    width:100%;
+    justify-content:space-between;
+  }
+  .inline-date input{
+    flex:1;
+    width:auto;
+    text-align:right;
+  }
+}
