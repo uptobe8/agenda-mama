@@ -1056,6 +1056,507 @@ input,select,textarea{
   }
 }
 
+
+
+/* UI CALENDARIO SERIO · MOBILE FIRST */
+:root{
+  --soft-shadow:0 18px 50px rgba(16,24,40,.08);
+  --chip-shadow:0 10px 24px rgba(16,24,40,.08);
+}
+body{
+  background:
+    radial-gradient(circle at 18% -5%, rgba(99,102,241,.10), transparent 28%),
+    radial-gradient(circle at 92% 8%, rgba(18,184,134,.08), transparent 24%),
+    #f7f8fb;
+}
+.topbar{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.nav{
+  max-width:1240px;
+  margin:14px auto 4px;
+  border:1px solid rgba(16,24,40,.08);
+  background:rgba(255,255,255,.86);
+  backdrop-filter:blur(22px);
+  border-radius:28px;
+  box-shadow:0 14px 40px rgba(16,24,40,.06);
+}
+.container{
+  max-width:1240px;
+}
+.agenda-home-panel{
+  padding:22px!important;
+  border-radius:32px!important;
+  background:rgba(255,255,255,.82)!important;
+  box-shadow:var(--soft-shadow)!important;
+}
+.agenda-top{
+  display:grid!important;
+  grid-template-columns:1fr auto!important;
+  gap:18px!important;
+  align-items:center!important;
+  margin-bottom:18px!important;
+}
+.agenda-title-block h1{
+  font-size:clamp(32px,4vw,54px)!important;
+  letter-spacing:-.065em!important;
+}
+.agenda-title-block p{
+  font-size:16px!important;
+}
+.agenda-nav-controls .btn{
+  width:46px;
+  height:46px;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  padding:0;
+  border-radius:999px;
+}
+.agenda-nav-controls #todayBtn{
+  width:auto;
+  padding:0 18px;
+}
+.agenda-filterbar{
+  display:grid!important;
+  grid-template-columns:1.35fr .62fr .68fr auto!important;
+  gap:10px!important;
+  align-items:center!important;
+  margin-bottom:18px!important;
+}
+.agenda-filterbar .segment{
+  height:54px;
+  padding:5px;
+  border-radius:999px;
+  background:#f3f5f8;
+  border:1px solid rgba(16,24,40,.06);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+}
+.agenda-filterbar .segment button{
+  border-radius:999px;
+  min-height:44px;
+  padding:0 18px;
+  font-weight:900;
+}
+.agenda-filterbar .segment button.active{
+  background:#111827;
+  color:#fff;
+  box-shadow:0 10px 24px rgba(17,24,39,.16);
+}
+.agenda-filterbar select,
+.inline-date{
+  min-height:54px!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  border:1px solid rgba(16,24,40,.08)!important;
+  box-shadow:0 8px 22px rgba(16,24,40,.045);
+}
+.agenda-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+}
+.agenda-actions .btn{
+  min-height:54px!important;
+  border-radius:18px!important;
+  box-shadow:var(--chip-shadow);
+}
+.inline-date-group{
+  display:flex!important;
+  gap:8px!important;
+  align-items:center!important;
+}
+.calendar-panel{
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.month-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 390px;
+  gap:18px;
+  align-items:start;
+}
+.month-board,
+.month-feed{
+  border:1px solid rgba(16,24,40,.08);
+  background:rgba(255,255,255,.92);
+  border-radius:30px;
+  box-shadow:var(--soft-shadow);
+}
+.month-board{
+  padding:18px;
+}
+.month-weekdays{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  padding:0 4px 8px;
+}
+.month-weekdays span{
+  text-align:center;
+  color:#98a2b3;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.month-grid{
+  display:grid!important;
+  grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  gap:8px!important;
+  overflow:visible!important;
+  padding:0!important;
+}
+.month-day{
+  min-height:108px!important;
+  border-radius:22px!important;
+  padding:10px!important;
+  background:#fff!important;
+  border:1px solid rgba(16,24,40,.07)!important;
+  box-shadow:0 8px 20px rgba(16,24,40,.035);
+  cursor:pointer;
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.month-day:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 34px rgba(16,24,40,.08);
+}
+.month-day.out{
+  opacity:.36;
+}
+.month-day.today,
+.month-day.selected{
+  border-color:rgba(54,87,255,.42)!important;
+  box-shadow:0 18px 40px rgba(54,87,255,.12)!important;
+}
+.month-day-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px!important;
+}
+.month-day-num{
+  width:30px;
+  height:30px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:950;
+  color:#111827;
+}
+.month-day.today .month-day-num,
+.month-day.selected .month-day-num{
+  background:#111827;
+  color:#fff;
+}
+.month-day-week{
+  color:#98a2b3;
+  font-size:11px;
+  font-weight:850;
+  text-transform:uppercase;
+}
+.month-dots{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.month-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:#d0d5dd;
+}
+.month-shifts-mini{
+  display:grid;
+  gap:6px;
+}
+.month-mini-shift{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  border-radius:12px;
+  padding:6px 8px;
+  background:#f8fafc;
+  border:1px solid rgba(16,24,40,.05);
+  font-size:11px;
+  font-weight:850;
+  color:#475467;
+}
+.month-mini-shift b{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.month-mini-shift.noche{
+  background:#111827;
+  color:#fff;
+}
+.month-mini-shift.tarde{
+  background:#fff7ed;
+  color:#9a3412;
+}
+.month-mini-shift.dia{
+  background:#ecfdf3;
+  color:#027a48;
+}
+.month-feed{
+  padding:16px;
+  position:sticky;
+  top:18px;
+}
+.month-feed-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:10px;
+  margin-bottom:12px;
+}
+.month-feed-head h3{
+  margin:0;
+  font-size:20px;
+  letter-spacing:-.04em;
+}
+.month-feed-head p{
+  margin:3px 0 0;
+  color:#98a2b3;
+  font-size:13px;
+  font-weight:750;
+}
+.month-feed-list{
+  display:grid;
+  gap:10px;
+  max-height:70vh;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-right:2px;
+}
+.feed-day{
+  display:grid;
+  gap:8px;
+}
+.feed-date{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#667085;
+  font-size:13px;
+  font-weight:900;
+}
+.feed-card{
+  border-radius:22px;
+  background:#fff;
+  border:1px solid rgba(16,24,40,.07);
+  box-shadow:0 12px 28px rgba(16,24,40,.06);
+  overflow:hidden;
+}
+.feed-card-line{
+  height:5px;
+  background:#d0d5dd;
+}
+.feed-card-body{
+  display:grid;
+  grid-template-columns:56px 1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:13px;
+}
+.feed-shift{
+  width:48px;
+  height:48px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  font-weight:950;
+  background:#f2f4f7;
+  color:#475467;
+}
+.feed-person{
+  min-width:0;
+}
+.feed-person strong{
+  display:block;
+  font-size:15px;
+  letter-spacing:-.025em;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.feed-person span{
+  display:block;
+  margin-top:3px;
+  font-size:12px;
+  color:#98a2b3;
+  font-weight:750;
+}
+.feed-edit{
+  width:38px!important;
+  height:38px!important;
+  min-height:38px!important;
+  padding:0!important;
+  border-radius:14px!important;
+}
+@media(max-width:1180px){
+  .agenda-filterbar{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .agenda-filterbar .segment,
+  .agenda-actions{
+    grid-column:1/-1;
+  }
+  .month-layout{
+    grid-template-columns:1fr;
+  }
+  .month-feed{
+    position:relative;
+    top:auto;
+  }
+}
+@media(max-width:760px){
+  body{
+    background:#f7f8fb;
+  }
+  .topbar{
+    padding:10px 12px 0!important;
+  }
+  .nav{
+    margin:0 auto;
+    border-radius:24px;
+  }
+  .container{
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+  .agenda-home-panel{
+    padding:14px!important;
+    border-radius:28px!important;
+  }
+  .agenda-top{
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+    margin-bottom:14px!important;
+  }
+  .agenda-title-block h1{
+    font-size:32px!important;
+  }
+  .agenda-nav-controls{
+    justify-content:space-between!important;
+    background:#fff;
+    border:1px solid rgba(16,24,40,.07);
+    border-radius:22px;
+    padding:6px;
+    box-shadow:0 10px 24px rgba(16,24,40,.045);
+  }
+  .agenda-filterbar{
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+  }
+  .agenda-filterbar .segment{
+    display:flex!important;
+    overflow-x:auto!important;
+    height:52px;
+  }
+  .agenda-filterbar .segment button{
+    flex:0 0 auto!important;
+    min-height:42px;
+    padding:0 16px;
+  }
+  .agenda-filterbar select,
+  .inline-date{
+    min-height:50px!important;
+  }
+  .inline-date-group{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+  }
+  .agenda-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+  .agenda-actions .btn{
+    width:100%;
+  }
+  .month-board{
+    padding:14px;
+    border-radius:28px;
+  }
+  .month-weekdays{
+    gap:2px;
+  }
+  .month-weekdays span{
+    font-size:11px;
+  }
+  .month-grid{
+    gap:4px!important;
+  }
+  .month-day{
+    min-height:54px!important;
+    border-radius:16px!important;
+    padding:6px 4px!important;
+    box-shadow:none!important;
+  }
+  .month-day.out{
+    visibility:hidden;
+    opacity:0;
+  }
+  .month-day-head{
+    justify-content:center!important;
+    margin-bottom:4px!important;
+  }
+  .month-day-num{
+    width:28px;
+    height:28px;
+    font-size:13px;
+  }
+  .month-day-week{
+    display:none;
+  }
+  .month-shifts-mini{
+    display:none;
+  }
+  .month-dots{
+    justify-content:center;
+    gap:3px;
+    margin:0;
+  }
+  .month-dot{
+    width:5px;
+    height:5px;
+  }
+  .month-feed{
+    padding:0;
+    background:transparent;
+    border:0;
+    box-shadow:none;
+  }
+  .month-feed-list{
+    max-height:none;
+    overflow:visible;
+  }
+  .feed-card{
+    border-radius:24px;
+  }
+  .feed-card-body{
+    grid-template-columns:50px 1fr auto;
+    padding:12px;
+  }
+  .feed-shift{
+    width:44px;
+    height:44px;
+    border-radius:16px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1143,6 +1644,7 @@ input,select,textarea{
   let currentView = "month";
   let filterPerson = "all";
   let filterShift = "all";
+  let selectedMonthDate = new Date(selectedDate);
 
   const $ = (s, r=document) => r.querySelector(s);
   const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
@@ -1381,32 +1883,107 @@ input,select,textarea{
   }
 
 
+
+  function isSameDay(a,b){
+    return iso(a) === iso(b);
+  }
+
+  function shiftInitial(shift){
+    return shift === "dia" ? "D" : shift === "tarde" ? "T" : "N";
+  }
+
+  function shiftName(shift){
+    return shift === "dia" ? "Día" : shift === "tarde" ? "Tarde" : "Noche";
+  }
+
+  function shiftAccent(shift, p){
+    if(p && p.color) return p.color;
+    return shift === "noche" ? "#111827" : shift === "dia" ? "#12b886" : "#f59f00";
+  }
+
+  function monthItemsFor(date){
+    return shiftsFor(date).map(shift => ({shift, ...assign(date,shift)}))
+      .filter(item => (filterShift === "all" || item.shift === filterShift) && (filterPerson === "all" || (item.person && item.person.id === filterPerson)));
+  }
+
+
   function renderMonth(cal){
     const first = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1, 12);
     const gridStart = startWeek(first);
     const days = Array.from({length:42},(_,i)=>addDays(gridStart,i));
+    if(selectedMonthDate.getMonth() !== selectedDate.getMonth() || selectedMonthDate.getFullYear() !== selectedDate.getFullYear()){
+      selectedMonthDate = first;
+    }
 
-    cal.innerHTML = `<div class="month-grid">${
-      days.map(date=>{
-        const out = date.getMonth() !== selectedDate.getMonth();
-        const rendered = shiftsFor(date).map(shift=>{
-          const item = {shift, ...assign(date,shift)};
-          if(filterShift !== "all" && item.shift !== filterShift) return "";
-          if(filterPerson !== "all" && (!item.person || item.person.id !== filterPerson)) return "";
-          const cls = item.shift === "noche" ? "noche" : item.shift === "dia" ? "dia" : "tarde";
-          const label = item.shift === "dia" ? "D" : item.shift === "tarde" ? "T" : "N";
-          const p = item.person;
-          return `<button class="month-shift ${cls}" data-override="${iso(date)}:${item.shift}" type="button">
-            <span>${label}</span>
-            <span class="person-mini">${p ? `<i class="avatar-dot" style="background:${p.color}"></i><b>${p.name}</b>` : `<b>Sin cubrir</b>`}</span>
-          </button>`;
-        }).join("");
-        return `<section class="month-day ${out ? "out" : ""}">
-          <div class="month-day-head"><b>${date.getDate()}</b><span>${date.toLocaleDateString("es-ES",{weekday:"short"})}</span></div>
-          ${state.rulesEnabled === false ? `<div class="notice">Vacío</div>` : (rendered || `<div class="notice">Sin turnos</div>`)}
-        </section>`;
-      }).join("")
-    }</div>`;
+    const monthDays = days.filter(d => d.getMonth() === selectedDate.getMonth());
+    const selectedItems = monthItemsFor(selectedMonthDate);
+    const feedDays = monthDays
+      .map(date => ({date, items:monthItemsFor(date)}))
+      .filter(day => day.items.length || isSameDay(day.date, selectedMonthDate));
+
+    cal.innerHTML = `<div class="month-layout">
+      <section class="month-board">
+        <div class="month-weekdays">
+          ${["L","M","X","J","V","S","D"].map(d=>`<span>${d}</span>`).join("")}
+        </div>
+        <div class="month-grid">
+          ${days.map(date=>{
+            const out = date.getMonth() !== selectedDate.getMonth();
+            const today = isSameDay(date,new Date());
+            const selected = isSameDay(date,selectedMonthDate);
+            const items = monthItemsFor(date);
+            return `<button class="month-day ${out ? "out" : ""} ${today ? "today" : ""} ${selected ? "selected" : ""}" data-select-date="${iso(date)}" type="button">
+              <div class="month-day-head">
+                <span class="month-day-num">${date.getDate()}</span>
+                <span class="month-day-week">${date.toLocaleDateString("es-ES",{weekday:"short"})}</span>
+              </div>
+              <div class="month-dots">
+                ${items.slice(0,5).map(item=>`<i class="month-dot" style="background:${shiftAccent(item.shift,item.person)}"></i>`).join("")}
+              </div>
+              <div class="month-shifts-mini">
+                ${items.slice(0,3).map(item=>`
+                  <div class="month-mini-shift ${item.shift}">
+                    <i class="avatar-dot" style="background:${shiftAccent(item.shift,item.person)}"></i>
+                    <b>${shiftInitial(item.shift)} · ${item.person ? item.person.name : "Sin cubrir"}</b>
+                  </div>`).join("")}
+              </div>
+            </button>`;
+          }).join("")}
+        </div>
+      </section>
+
+      <aside class="month-feed">
+        <div class="month-feed-head">
+          <div>
+            <h3>${selectedMonthDate.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})}</h3>
+            <p>${selectedItems.length ? selectedItems.length + " turnos" : "Sin turnos"}</p>
+          </div>
+        </div>
+        <div class="month-feed-list">
+          ${feedDays.map(day=>`
+            <section class="feed-day">
+              <div class="feed-date">
+                <span>${day.date.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})}</span>
+              </div>
+              ${day.items.length ? day.items.map(item=>{
+                const p = item.person;
+                const color = shiftAccent(item.shift,p);
+                return `<article class="feed-card">
+                  <div class="feed-card-line" style="background:${color}"></div>
+                  <div class="feed-card-body">
+                    <div class="feed-shift" style="background:${color}18;color:${color}">${shiftInitial(item.shift)}</div>
+                    <div class="feed-person">
+                      <strong>${p ? p.name : "Sin cubrir"}</strong>
+                      <span>${shiftName(item.shift)} · ${item.rule}</span>
+                    </div>
+                    <button class="btn feed-edit" data-override="${iso(day.date)}:${item.shift}" type="button">+</button>
+                  </div>
+                </article>`;
+              }).join("") : `<div class="notice">Sin turnos con estos filtros.</div>`}
+            </section>`).join("")}
+        </div>
+      </aside>
+    </div>`;
   }
 
 
@@ -1808,16 +2385,21 @@ input,select,textarea{
       if(currentView === "year") selectedDate = new Date(selectedDate.getFullYear()-1, selectedDate.getMonth(), 1, 12);
       else if(currentView === "month") selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth()-1, 1, 12);
       else selectedDate = addDays(selectedDate, currentView==="week" ? -7 : -1);
+      selectedMonthDate = new Date(selectedDate);
       renderAgenda();
     });
     $("#nextPeriod")?.addEventListener("click",()=>{
       if(currentView === "year") selectedDate = new Date(selectedDate.getFullYear()+1, selectedDate.getMonth(), 1, 12);
       else if(currentView === "month") selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 1, 12);
       else selectedDate = addDays(selectedDate, currentView==="week" ? 7 : 1);
+      selectedMonthDate = new Date(selectedDate);
       renderAgenda();
     });
     $("#todayBtn")?.addEventListener("click",()=>{ selectedDate = new Date(); selectedDate.setHours(12,0,0,0); renderAgenda(); });
     document.addEventListener("click",e=>{
+      const selectDate = e.target.closest("[data-select-date]");
+      if(selectDate){ selectedMonthDate = new Date(selectDate.dataset.selectDate + "T12:00:00"); renderAgenda(); return; }
+
       const applyVars = e.target.closest("[data-apply-variables]");
       if(applyVars){ applyVariables(); return; }
 

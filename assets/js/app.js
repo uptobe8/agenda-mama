@@ -33,6 +33,7 @@
   let currentView = "month";
   let filterPerson = "all";
   let filterShift = "all";
+  let selectedMonthDate = new Date(selectedDate);
 
   const $ = (s, r=document) => r.querySelector(s);
   const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
@@ -271,32 +272,107 @@
   }
 
 
+
+  function isSameDay(a,b){
+    return iso(a) === iso(b);
+  }
+
+  function shiftInitial(shift){
+    return shift === "dia" ? "D" : shift === "tarde" ? "T" : "N";
+  }
+
+  function shiftName(shift){
+    return shift === "dia" ? "Día" : shift === "tarde" ? "Tarde" : "Noche";
+  }
+
+  function shiftAccent(shift, p){
+    if(p && p.color) return p.color;
+    return shift === "noche" ? "#111827" : shift === "dia" ? "#12b886" : "#f59f00";
+  }
+
+  function monthItemsFor(date){
+    return shiftsFor(date).map(shift => ({shift, ...assign(date,shift)}))
+      .filter(item => (filterShift === "all" || item.shift === filterShift) && (filterPerson === "all" || (item.person && item.person.id === filterPerson)));
+  }
+
+
   function renderMonth(cal){
     const first = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1, 12);
     const gridStart = startWeek(first);
     const days = Array.from({length:42},(_,i)=>addDays(gridStart,i));
+    if(selectedMonthDate.getMonth() !== selectedDate.getMonth() || selectedMonthDate.getFullYear() !== selectedDate.getFullYear()){
+      selectedMonthDate = first;
+    }
 
-    cal.innerHTML = `<div class="month-grid">${
-      days.map(date=>{
-        const out = date.getMonth() !== selectedDate.getMonth();
-        const rendered = shiftsFor(date).map(shift=>{
-          const item = {shift, ...assign(date,shift)};
-          if(filterShift !== "all" && item.shift !== filterShift) return "";
-          if(filterPerson !== "all" && (!item.person || item.person.id !== filterPerson)) return "";
-          const cls = item.shift === "noche" ? "noche" : item.shift === "dia" ? "dia" : "tarde";
-          const label = item.shift === "dia" ? "D" : item.shift === "tarde" ? "T" : "N";
-          const p = item.person;
-          return `<button class="month-shift ${cls}" data-override="${iso(date)}:${item.shift}" type="button">
-            <span>${label}</span>
-            <span class="person-mini">${p ? `<i class="avatar-dot" style="background:${p.color}"></i><b>${p.name}</b>` : `<b>Sin cubrir</b>`}</span>
-          </button>`;
-        }).join("");
-        return `<section class="month-day ${out ? "out" : ""}">
-          <div class="month-day-head"><b>${date.getDate()}</b><span>${date.toLocaleDateString("es-ES",{weekday:"short"})}</span></div>
-          ${state.rulesEnabled === false ? `<div class="notice">Vacío</div>` : (rendered || `<div class="notice">Sin turnos</div>`)}
-        </section>`;
-      }).join("")
-    }</div>`;
+    const monthDays = days.filter(d => d.getMonth() === selectedDate.getMonth());
+    const selectedItems = monthItemsFor(selectedMonthDate);
+    const feedDays = monthDays
+      .map(date => ({date, items:monthItemsFor(date)}))
+      .filter(day => day.items.length || isSameDay(day.date, selectedMonthDate));
+
+    cal.innerHTML = `<div class="month-layout">
+      <section class="month-board">
+        <div class="month-weekdays">
+          ${["L","M","X","J","V","S","D"].map(d=>`<span>${d}</span>`).join("")}
+        </div>
+        <div class="month-grid">
+          ${days.map(date=>{
+            const out = date.getMonth() !== selectedDate.getMonth();
+            const today = isSameDay(date,new Date());
+            const selected = isSameDay(date,selectedMonthDate);
+            const items = monthItemsFor(date);
+            return `<button class="month-day ${out ? "out" : ""} ${today ? "today" : ""} ${selected ? "selected" : ""}" data-select-date="${iso(date)}" type="button">
+              <div class="month-day-head">
+                <span class="month-day-num">${date.getDate()}</span>
+                <span class="month-day-week">${date.toLocaleDateString("es-ES",{weekday:"short"})}</span>
+              </div>
+              <div class="month-dots">
+                ${items.slice(0,5).map(item=>`<i class="month-dot" style="background:${shiftAccent(item.shift,item.person)}"></i>`).join("")}
+              </div>
+              <div class="month-shifts-mini">
+                ${items.slice(0,3).map(item=>`
+                  <div class="month-mini-shift ${item.shift}">
+                    <i class="avatar-dot" style="background:${shiftAccent(item.shift,item.person)}"></i>
+                    <b>${shiftInitial(item.shift)} · ${item.person ? item.person.name : "Sin cubrir"}</b>
+                  </div>`).join("")}
+              </div>
+            </button>`;
+          }).join("")}
+        </div>
+      </section>
+
+      <aside class="month-feed">
+        <div class="month-feed-head">
+          <div>
+            <h3>${selectedMonthDate.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})}</h3>
+            <p>${selectedItems.length ? selectedItems.length + " turnos" : "Sin turnos"}</p>
+          </div>
+        </div>
+        <div class="month-feed-list">
+          ${feedDays.map(day=>`
+            <section class="feed-day">
+              <div class="feed-date">
+                <span>${day.date.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"})}</span>
+              </div>
+              ${day.items.length ? day.items.map(item=>{
+                const p = item.person;
+                const color = shiftAccent(item.shift,p);
+                return `<article class="feed-card">
+                  <div class="feed-card-line" style="background:${color}"></div>
+                  <div class="feed-card-body">
+                    <div class="feed-shift" style="background:${color}18;color:${color}">${shiftInitial(item.shift)}</div>
+                    <div class="feed-person">
+                      <strong>${p ? p.name : "Sin cubrir"}</strong>
+                      <span>${shiftName(item.shift)} · ${item.rule}</span>
+                    </div>
+                    <button class="btn feed-edit" data-override="${iso(day.date)}:${item.shift}" type="button">+</button>
+                  </div>
+                </article>`;
+              }).join("") : `<div class="notice">Sin turnos con estos filtros.</div>`}
+            </section>`).join("")}
+        </div>
+      </aside>
+    </div>`;
   }
 
 
@@ -698,16 +774,21 @@
       if(currentView === "year") selectedDate = new Date(selectedDate.getFullYear()-1, selectedDate.getMonth(), 1, 12);
       else if(currentView === "month") selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth()-1, 1, 12);
       else selectedDate = addDays(selectedDate, currentView==="week" ? -7 : -1);
+      selectedMonthDate = new Date(selectedDate);
       renderAgenda();
     });
     $("#nextPeriod")?.addEventListener("click",()=>{
       if(currentView === "year") selectedDate = new Date(selectedDate.getFullYear()+1, selectedDate.getMonth(), 1, 12);
       else if(currentView === "month") selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 1, 12);
       else selectedDate = addDays(selectedDate, currentView==="week" ? 7 : 1);
+      selectedMonthDate = new Date(selectedDate);
       renderAgenda();
     });
     $("#todayBtn")?.addEventListener("click",()=>{ selectedDate = new Date(); selectedDate.setHours(12,0,0,0); renderAgenda(); });
     document.addEventListener("click",e=>{
+      const selectDate = e.target.closest("[data-select-date]");
+      if(selectDate){ selectedMonthDate = new Date(selectDate.dataset.selectDate + "T12:00:00"); renderAgenda(); return; }
+
       const applyVars = e.target.closest("[data-apply-variables]");
       if(applyVars){ applyVariables(); return; }
 
