@@ -285,9 +285,12 @@
     return shift === "dia" ? "Día" : shift === "tarde" ? "Tarde" : "Noche";
   }
 
+  function shiftTypeColor(shift){
+    return shift === "dia" ? "#059669" : shift === "tarde" ? "#d97706" : "#2563eb";
+  }
+
   function shiftAccent(shift, p){
-    if(p && p.color) return p.color;
-    return shift === "noche" ? "#111827" : shift === "dia" ? "#12b886" : "#f59f00";
+    return p && p.color ? p.color : shiftTypeColor(shift);
   }
 
   function monthItemsFor(date){
@@ -356,13 +359,14 @@
               </div>
               ${day.items.length ? day.items.map(item=>{
                 const p = item.person;
-                const color = shiftAccent(item.shift,p);
+                const color = shiftTypeColor(item.shift);
+                const personColor = shiftAccent(item.shift,p);
                 return `<article class="feed-card">
-                  <div class="feed-card-line" style="background:${color}"></div>
+                  <div class="feed-card-line ${item.shift}"></div>
                   <div class="feed-card-body">
-                    <div class="feed-shift" style="background:${color}18;color:${color}">${shiftInitial(item.shift)}</div>
+                    <div class="feed-shift ${item.shift}">${shiftInitial(item.shift)}</div>
                     <div class="feed-person">
-                      <strong>${p ? p.name : "Sin cubrir"}</strong>
+                      <strong>${p ? `<i class="avatar-dot" style="background:${personColor}"></i> ` : ""}${p ? p.name : "Sin cubrir"}</strong>
                       <span>${shiftName(item.shift)} · ${item.rule}</span>
                     </div>
                     <button class="btn feed-edit" data-override="${iso(day.date)}:${item.shift}" type="button">+</button>

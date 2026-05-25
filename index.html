@@ -1723,6 +1723,168 @@ body{
   }
 }
 
+
+
+/* PALETA COHERENTE · LEGIBLE */
+:root{
+  --primary:#4f46e5;
+  --primary-soft:#eef2ff;
+  --primary-line:#c7d2fe;
+  --ink:#111827;
+  --muted:#667085;
+  --line:#e4e7ec;
+  --day:#059669;
+  --day-soft:#ecfdf3;
+  --day-line:#abefc6;
+  --afternoon:#d97706;
+  --afternoon-soft:#fffbeb;
+  --afternoon-line:#fedf89;
+  --night:#2563eb;
+  --night-soft:#eff6ff;
+  --night-line:#bfdbfe;
+  --danger:#b42318;
+  --danger-soft:#fff1f3;
+  --danger-line:#ffd6dd;
+}
+body{
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 20% -8%, rgba(79,70,229,.10), transparent 28%),
+    radial-gradient(circle at 94% 8%, rgba(5,150,105,.06), transparent 26%),
+    #f7f8fb!important;
+}
+.brand-mark{
+  background:linear-gradient(145deg,var(--primary),#7c3aed)!important;
+}
+.agenda-filterbar .segment button.active,
+.month-day.today .month-day-num,
+.month-day.selected .month-day-num{
+  background:var(--primary)!important;
+  color:#fff!important;
+  box-shadow:0 10px 24px rgba(79,70,229,.22)!important;
+}
+.btn.primary,
+.btn.dark,
+.agenda-actions .btn.dark{
+  background:var(--primary)!important;
+  color:#fff!important;
+  border-color:var(--primary)!important;
+}
+.btn.primary:hover,
+.btn.dark:hover,
+.agenda-actions .btn.dark:hover{
+  filter:brightness(.96);
+}
+.btn.danger,
+.agenda-actions .btn.danger{
+  background:var(--danger-soft)!important;
+  color:var(--danger)!important;
+  border-color:var(--danger-line)!important;
+}
+.btn:not(.dark):not(.primary):not(.danger){
+  background:#fff!important;
+  color:var(--ink)!important;
+  border-color:var(--line)!important;
+}
+.agenda-filterbar select,
+.inline-date,
+.agenda-nav-controls,
+.agenda-tools{
+  border-color:var(--line)!important;
+}
+.month-day.today,
+.month-day.selected{
+  border-color:var(--primary-line)!important;
+  background:linear-gradient(180deg,#fff,var(--primary-soft))!important;
+  box-shadow:0 18px 40px rgba(79,70,229,.12)!important;
+}
+.month-mini-shift{
+  background:#f8fafc!important;
+  color:#475467!important;
+}
+.month-mini-shift.dia{
+  background:var(--day-soft)!important;
+  color:#047857!important;
+  border-color:var(--day-line)!important;
+}
+.month-mini-shift.tarde{
+  background:var(--afternoon-soft)!important;
+  color:#b45309!important;
+  border-color:var(--afternoon-line)!important;
+}
+.month-mini-shift.noche{
+  background:var(--night-soft)!important;
+  color:#1d4ed8!important;
+  border-color:var(--night-line)!important;
+}
+.feed-shift.dia{
+  background:var(--day-soft)!important;
+  color:var(--day)!important;
+}
+.feed-shift.tarde{
+  background:var(--afternoon-soft)!important;
+  color:var(--afternoon)!important;
+}
+.feed-shift.noche{
+  background:var(--night-soft)!important;
+  color:var(--night)!important;
+}
+.feed-card-line.dia{background:var(--day)!important}
+.feed-card-line.tarde{background:var(--afternoon)!important}
+.feed-card-line.noche{background:var(--night)!important}
+.feed-card{
+  border-color:rgba(17,24,39,.07)!important;
+}
+.person-card,
+.card{
+  border-color:var(--line)!important;
+}
+.person-avatar,
+.avatar-dot{
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.38);
+}
+.badge:not(.blocked){
+  background:var(--primary-soft)!important;
+  color:#3730a3!important;
+  border-color:var(--primary-line)!important;
+}
+.badge.blocked{
+  background:var(--danger-soft)!important;
+  color:var(--danger)!important;
+  border-color:var(--danger-line)!important;
+}
+.shift-card.dia{
+  background:var(--day-soft)!important;
+  border-color:var(--day-line)!important;
+}
+.shift-card.tarde{
+  background:var(--afternoon-soft)!important;
+  border-color:var(--afternoon-line)!important;
+}
+.shift-card.noche{
+  background:var(--night-soft)!important;
+  border-color:var(--night-line)!important;
+  color:var(--ink)!important;
+}
+.shift-card.noche .shift-label{
+  color:var(--night)!important;
+}
+.shift-card.dia .shift-label{
+  color:var(--day)!important;
+}
+.shift-card.tarde .shift-label{
+  color:var(--afternoon)!important;
+}
+.notice{
+  background:#f8fafc!important;
+  color:var(--muted)!important;
+  border-color:var(--line)!important;
+}
+.approval-panel{
+  background:linear-gradient(145deg,#fff,var(--primary-soft))!important;
+  border-color:var(--primary-line)!important;
+}
+
 </style>
 </head>
 <body>
@@ -2081,9 +2243,12 @@ body{
     return shift === "dia" ? "Día" : shift === "tarde" ? "Tarde" : "Noche";
   }
 
+  function shiftTypeColor(shift){
+    return shift === "dia" ? "#059669" : shift === "tarde" ? "#d97706" : "#2563eb";
+  }
+
   function shiftAccent(shift, p){
-    if(p && p.color) return p.color;
-    return shift === "noche" ? "#111827" : shift === "dia" ? "#12b886" : "#f59f00";
+    return p && p.color ? p.color : shiftTypeColor(shift);
   }
 
   function monthItemsFor(date){
@@ -2152,13 +2317,14 @@ body{
               </div>
               ${day.items.length ? day.items.map(item=>{
                 const p = item.person;
-                const color = shiftAccent(item.shift,p);
+                const color = shiftTypeColor(item.shift);
+                const personColor = shiftAccent(item.shift,p);
                 return `<article class="feed-card">
-                  <div class="feed-card-line" style="background:${color}"></div>
+                  <div class="feed-card-line ${item.shift}"></div>
                   <div class="feed-card-body">
-                    <div class="feed-shift" style="background:${color}18;color:${color}">${shiftInitial(item.shift)}</div>
+                    <div class="feed-shift ${item.shift}">${shiftInitial(item.shift)}</div>
                     <div class="feed-person">
-                      <strong>${p ? p.name : "Sin cubrir"}</strong>
+                      <strong>${p ? `<i class="avatar-dot" style="background:${personColor}"></i> ` : ""}${p ? p.name : "Sin cubrir"}</strong>
                       <span>${shiftName(item.shift)} · ${item.rule}</span>
                     </div>
                     <button class="btn feed-edit" data-override="${iso(day.date)}:${item.shift}" type="button">+</button>
