@@ -764,7 +764,21 @@
   }
 
 
+
+  function setupMobileTools(){
+    const tools = document.querySelector(".agenda-tools");
+    if(!tools) return;
+    if(window.matchMedia("(max-width: 760px)").matches){
+      tools.removeAttribute("open");
+    }else{
+      tools.setAttribute("open","");
+    }
+  }
+
+
   function bind(){
+    setupMobileTools();
+    window.addEventListener('resize', setupMobileTools);
     const menu = $("#menuBtn"), links = $("#navLinks");
     if(menu && links) menu.addEventListener("click",()=>links.classList.toggle("open"));
     $$(".view-btn").forEach(b=>b.addEventListener("click",()=>{ currentView=b.dataset.view; renderAgenda(); }));

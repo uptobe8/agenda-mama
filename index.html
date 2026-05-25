@@ -1557,6 +1557,172 @@ body{
   }
 }
 
+
+
+/* FIX MOBILE ORDEN CORRECTO · CALENDARIO PRIMERO */
+.agenda-home-panel{
+  display:flex!important;
+  flex-direction:column!important;
+}
+.agenda-top{
+  order:1;
+}
+.agenda-tools{
+  order:2;
+  border:0;
+  padding:0;
+  margin:0 0 18px;
+}
+.agenda-tools summary{
+  display:none;
+}
+.agenda-tools .agenda-filterbar{
+  margin-bottom:0!important;
+}
+.calendar-panel{
+  order:3;
+}
+@media(max-width:760px){
+  .agenda-home-panel{
+    gap:12px!important;
+  }
+  .agenda-top{
+    order:1;
+    margin-bottom:2px!important;
+  }
+  .calendar-panel{
+    order:2;
+  }
+  .agenda-tools{
+    order:3;
+    margin:0!important;
+    border:1px solid rgba(16,24,40,.08);
+    background:#fff;
+    border-radius:24px;
+    box-shadow:0 12px 30px rgba(16,24,40,.055);
+    overflow:hidden;
+  }
+  .agenda-tools summary{
+    display:flex!important;
+    align-items:center;
+    justify-content:space-between;
+    min-height:56px;
+    padding:0 18px;
+    cursor:pointer;
+    list-style:none;
+    font-weight:950;
+    color:#111827;
+    letter-spacing:-.025em;
+  }
+  .agenda-tools summary::-webkit-details-marker{
+    display:none;
+  }
+  .agenda-tools summary::after{
+    content:"+";
+    width:32px;
+    height:32px;
+    display:grid;
+    place-items:center;
+    border-radius:999px;
+    background:#f2f4f7;
+    color:#111827;
+    font-size:22px;
+    line-height:1;
+  }
+  .agenda-tools[open] summary::after{
+    content:"–";
+  }
+  .agenda-tools .agenda-filterbar{
+    padding:0 12px 12px;
+    margin:0!important;
+  }
+  .agenda-title-block h1{
+    font-size:30px!important;
+    margin-bottom:2px!important;
+  }
+  .agenda-title-block p{
+    font-size:15px!important;
+  }
+  .agenda-nav-controls{
+    min-height:54px;
+    padding:5px!important;
+  }
+  .agenda-nav-controls .btn{
+    height:42px!important;
+    width:42px!important;
+    min-height:42px!important;
+  }
+  .agenda-nav-controls #todayBtn{
+    width:auto!important;
+    min-width:96px!important;
+    padding:0 16px!important;
+  }
+  .agenda-filterbar .segment{
+    height:48px!important;
+    padding:4px!important;
+  }
+  .agenda-filterbar .segment button{
+    min-height:40px!important;
+    font-size:14px!important;
+    padding:0 13px!important;
+  }
+  .agenda-filterbar select,
+  .inline-date{
+    min-height:46px!important;
+    border-radius:16px!important;
+    font-size:14px!important;
+  }
+  .inline-date{
+    padding:0 12px!important;
+  }
+  .inline-date input{
+    min-width:0!important;
+    font-size:14px!important;
+  }
+  .agenda-actions .btn{
+    min-height:46px!important;
+    border-radius:16px!important;
+    font-size:14px!important;
+  }
+  .month-layout{
+    gap:12px!important;
+  }
+  .month-board{
+    padding:12px!important;
+    border-radius:24px!important;
+  }
+  .month-feed{
+    margin-top:0!important;
+  }
+  .month-feed-head h3{
+    font-size:18px!important;
+  }
+}
+@media(max-width:390px){
+  .container{
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .agenda-home-panel{
+    padding:10px!important;
+  }
+  .month-board{
+    padding:10px!important;
+  }
+  .month-grid{
+    gap:3px!important;
+  }
+  .month-day{
+    min-height:50px!important;
+    border-radius:14px!important;
+  }
+  .month-day-num{
+    width:25px!important;
+    height:25px!important;
+    font-size:12px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1579,7 +1745,7 @@ body{
   <div class="agenda-top">
     <div class="agenda-title-block">
       <h1>Agenda</h1>
-      <p id="periodTitle">Semana</p>
+      <p id="periodTitle">mayo de 2026</p>
     </div>
     <div class="agenda-nav-controls">
       <button class="btn small" id="prevPeriod" type="button">←</button>
@@ -1588,34 +1754,37 @@ body{
     </div>
   </div>
 
-  <div class="agenda-filterbar">
-    <div class="segment">
-      <button class="view-btn" data-view="week" type="button">Semana</button>
-      <button class="view-btn" data-view="day" type="button">Día</button>
-      <button class="view-btn" data-view="list" type="button">Lista</button>
-      <button class="view-btn active" data-view="month" type="button">Mes</button>
-      <button class="view-btn" data-view="year" type="button">Anual</button>
-    </div>
-
-    <select id="personFilter" aria-label="Filtrar por persona"><option value="all">Todas</option></select>
-
-    <select id="shiftFilter" aria-label="Filtrar por turno">
-      <option value="all">Todos los turnos</option>
-      <option value="dia">Día</option>
-      <option value="tarde">Tarde</option>
-      <option value="noche">Noche</option>
-    </select>
-
-    <div class="agenda-actions">
-      <button class="btn" data-apply-variables type="button">Aplicar variables</button>
-      <div class="inline-date-group">
-        <label class="inline-date">Desde <input id="fairFrom" type="date"></label>
-        <label class="inline-date">Hasta <input id="fairUntil" type="date"></label>
+  <details class="agenda-tools" open>
+    <summary>Filtros y reparto</summary>
+    <div class="agenda-filterbar">
+      <div class="segment">
+        <button class="view-btn" data-view="week" type="button">Semana</button>
+        <button class="view-btn" data-view="day" type="button">Día</button>
+        <button class="view-btn" data-view="list" type="button">Lista</button>
+        <button class="view-btn active" data-view="month" type="button">Mes</button>
+        <button class="view-btn" data-view="year" type="button">Anual</button>
       </div>
-      <button class="btn dark" data-fair-distribute type="button">Repartir justo</button>
-      <button class="btn danger" data-clear-calendar type="button">Borrar todo</button>
+
+      <select id="personFilter" aria-label="Filtrar por persona"><option value="all">Todas</option></select>
+
+      <select id="shiftFilter" aria-label="Filtrar por turno">
+        <option value="all">Todos los turnos</option>
+        <option value="dia">Día</option>
+        <option value="tarde">Tarde</option>
+        <option value="noche">Noche</option>
+      </select>
+
+      <div class="agenda-actions">
+        <button class="btn" data-apply-variables type="button">Aplicar variables</button>
+        <div class="inline-date-group">
+          <label class="inline-date">Desde <input id="fairFrom" type="date"></label>
+          <label class="inline-date">Hasta <input id="fairUntil" type="date"></label>
+        </div>
+        <button class="btn dark" data-fair-distribute type="button">Repartir justo</button>
+        <button class="btn danger" data-clear-calendar type="button">Borrar todo</button>
+      </div>
     </div>
-  </div>
+  </details>
 
   <div class="calendar-panel" id="calendar"></div>
 </section>
@@ -2391,7 +2560,21 @@ body{
   }
 
 
+
+  function setupMobileTools(){
+    const tools = document.querySelector(".agenda-tools");
+    if(!tools) return;
+    if(window.matchMedia("(max-width: 760px)").matches){
+      tools.removeAttribute("open");
+    }else{
+      tools.setAttribute("open","");
+    }
+  }
+
+
   function bind(){
+    setupMobileTools();
+    window.addEventListener('resize', setupMobileTools);
     const menu = $("#menuBtn"), links = $("#navLinks");
     if(menu && links) menu.addEventListener("click",()=>links.classList.toggle("open"));
     $$(".view-btn").forEach(b=>b.addEventListener("click",()=>{ currentView=b.dataset.view; renderAgenda(); }));
