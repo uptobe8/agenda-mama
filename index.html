@@ -1,0 +1,32 @@
+<!doctype html><html lang="es" data-page="agenda"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Agenda de cuidados | Agenda profesional</title><meta name="theme-color" content="#6d4aff"><meta name="description" content="Agenda de cuidados con turnos, personas y variables."><link rel="manifest" href="manifest.webmanifest"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;550;650;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/app.css"><script defer src="assets/js/app.js"></script></head><body><div class="app-shell"><header class="topbar">
+  <nav class="nav" aria-label="Navegación principal">
+    <a href="index.html" class="brand"><span class="brand-mark">AC</span><span class="brand-text"><strong>Agenda de cuidados</strong><span>turnos · variables · personas</span></span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" data-nav="agenda">Agenda</a>
+      <a href="personas.html" data-nav="personas">Personas</a>
+      <a href="variables.html" data-nav="variables">Variables</a>
+</div>
+    <div class="nav-actions"><button class="btn menu-btn" id="menuBtn" type="button">Menú</button></div>
+  </nav>
+</header><main class="container">
+<section class="agenda-home-panel">
+  <div class="agenda-top">
+    <div class="agenda-title-block"><h1>Agenda</h1><p id="periodTitle">mayo de 2026</p></div>
+  </div>
+  <div class="agenda-format">
+    <div class="format-group"><span class="format-label">Formato</span><div class="segment"><button class="view-btn" data-view="week" type="button">Semana</button><button class="view-btn" data-view="day" type="button">Día</button><button class="view-btn active" data-view="month" type="button">Mes</button><button class="view-btn" data-view="year" type="button">Anual</button></div></div>
+    <div class="format-group"><span class="format-label">Vista</span><div class="segment mode-segment"><button class="mode-btn active" data-mode="calendar" type="button">Calendario</button><button class="mode-btn" data-mode="list" type="button">Lista</button></div></div>
+  </div>
+  <div class="agenda-controls-stack">
+    <details class="agenda-tools" open><summary>Filtros</summary><div class="agenda-filterbar"><select id="personFilter" aria-label="Filtrar por persona"><option value="all">Todas</option></select><select id="shiftFilter" aria-label="Filtrar por turno"><option value="all">Todos los turnos</option><option value="dia">Día</option><option value="tarde">Tarde</option><option value="noche">Noche</option></select></div></details>
+    <details class="agenda-reparto"><summary>Acciones de reparto</summary><div class="reparto-panel"><button class="btn" data-apply-variables type="button">Aplicar variables</button><div class="inline-date-group"><label class="inline-date">Desde <input id="fairFrom" type="date"></label><label class="inline-date">Hasta <input id="fairUntil" type="date"></label></div><button class="btn dark" data-fair-distribute type="button">Repartir justo</button><button class="btn danger" data-clear-calendar type="button">Borrar todo</button></div></details>
+  </div>
+  <div class="agenda-calendar-nav"><div class="agenda-nav-controls"><button class="btn small" id="prevPeriod" type="button">←</button><button class="btn small" id="todayBtn" type="button">Hoy</button><button class="btn small" id="nextPeriod" type="button">→</button></div></div>
+  <div class="calendar-panel" id="calendar"></div>
+</section>
+<section class="panel approval-panel" id="approvalPanel" hidden></section>
+<section class="app-dashboard" id="bulmaDashboard"><div class="dashboard-main"><section class="dashboard-card"><div class="panel-head"><div><h2>Panel de control</h2><p>Resumen de reparto, cobertura y equilibrio de la agenda.</p></div></div><div class="report-grid" id="bulmaReportCards"></div><div class="kanban-board" id="bulmaKanban"></div></section></div><aside class="dashboard-side"><section class="dashboard-card"><h3>Actividad / avisos</h3><div class="inbox-list" id="bulmaInbox"></div></section></aside></section>
+</main><footer class="footer-app"><div><strong>Agenda de cuidados</strong><br>Datos guardados en el navegador. Exporta copias periódicas.</div><div class="footer-links"><button class="btn small" type="button" data-open-settings>⚙ Ajustes</button><button class="btn small" type="button" data-print>Imprimir</button></div></footer>
+<div class="bulma-modal" id="settingsLock"><div class="login-box"><div class="kicker">Acceso ajustes</div><h2>Zona protegida</h2><p class="lead" style="font-size:15px;margin-bottom:14px">Introduce la clave para abrir importación, exportación y restauración.</p><label>Clave<input id="settingsPin" type="password" placeholder="Clave"></label><div class="hero-actions" style="margin-top:16px"><button class="btn primary" type="button" id="unlockSettings">Entrar</button><button class="btn" type="button" data-close-settings>Cancelar</button></div><p class="notice" style="margin-top:14px">Clave inicial: <strong>1234</strong></p></div></div>
+<div class="bulma-modal" id="settingsModal"><div class="modal-cardx"><div class="modal-card-head"><div><h2>Ajustes</h2><p class="muted">Backup, restauración y utilidades locales.</p></div><button class="delete-x" type="button" data-close-settings>×</button></div><div class="modal-card-body"><div class="settings-grid"><button class="btn primary" type="button" data-settings-export-json>Exportar JSON</button><button class="btn" type="button" data-settings-export-csv>Exportar CSV</button><label class="btn dark">Importar JSON<input class="hidden-file" id="settingsImport" type="file" accept="application/json"></label><button class="btn danger" type="button" data-settings-reset>Restaurar datos iniciales</button></div><div class="notice" style="margin-top:16px">Esta app es estática. En GitHub Pages, los datos quedan en el navegador mediante almacenamiento local.</div></div><div class="modal-card-foot"><button class="btn" type="button" data-close-settings>Cerrar</button></div></div></div>
+</div></body></html>
