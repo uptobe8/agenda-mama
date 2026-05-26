@@ -812,61 +812,6 @@
 
 
 
-  function countInRange(start, days){
-    const range = scheduleRange(start, days);
-    const shifts = range.flatMap(d=>d.shifts);
-    const covered = shifts.filter(s=>s.person).length;
-    const conflicts = shifts.filter(s=>s.conflict).length;
-    const nights = shifts.filter(s=>s.shift === "noche");
-    const byPerson = {};
-    state.people.forEach(p=>byPerson[p.id]={person:p,total:0,nights:0,weekend:0});
-    range.forEach(day=>{
-      const isWeekend = [0,6].includes(day.date.getDay());
-      day.shifts.forEach(s=>{
-        if(!s.person) return;
-        if(!byPerson[s.person.id]) byPerson[s.person.id]={person:s.person,total:0,nights:0,weekend:0};
-        byPerson[s.person.id].total += 1;
-        if(s.shift === "noche") byPerson[s.person.id].nights += 1;
-        if(isWeekend) byPerson[s.person.id].weekend += 1;
-      });
-    });
-    return {range,shifts,covered,conflicts,nights,byPerson:Object.values(byPerson)};
-  }
-
-  function renderDashboard(){
-    const cards = $("#bulmaReportCards");
-    const kanban = $("#bulmaKanban");
-    const inbox = $("#bulmaInbox");
-    if(!cards || !kanban) return;
-    const first = currentView === "year" ? new Date(selectedDate.getFullYear(),0,1,12) : new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1, 12);
-    const days = currentView === "year" ? 365 : new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 0, 12).getDate();
-    const data = countInRange(first, days);
-    const total = data.shifts.length || 1;
-    const pct = Math.round(data.covered / total * 100);
-    const active = activePeople().length;
-    const nightPct = data.nights.length ? Math.round(data.nights.filter(s=>s.person).length / data.nights.length * 100) : 100;
-    cards.innerHTML = `
-      <article class="report-card"><span>Cobertura</span><strong>${pct}%</strong><div class="progress-soft"><i style="width:${pct}%"></i></div></article>
-      <article class="report-card"><span>Turnos cubiertos</span><strong>${data.covered}/${data.shifts.length}</strong><div class="progress-soft"><i style="width:${pct}%"></i></div></article>
-      <article class="report-card"><span>Noches</span><strong>${nightPct}%</strong><div class="progress-soft"><i style="width:${nightPct}%"></i></div></article>
-      <article class="report-card"><span>Personas activas</span><strong>${active}</strong><div class="progress-soft"><i style="width:${Math.min(100,active*25)}%"></i></div></article>`;
-    const sorted = data.byPerson.sort((a,b)=>b.total-a.total);
-    const max = Math.max(...sorted.map(x=>x.total),1);
-    kanban.innerHTML = `
-      <section class="kanban-col"><h3>Reparto por persona</h3>${sorted.map(x=>`<article class="kanban-card"><b><i class="avatar-dot" style="background:${x.person.color}"></i> ${x.person.name}</b><span>${x.total} turnos · ${x.nights} noches · ${x.weekend} finde</span><div class="progress-soft"><i style="width:${Math.round(x.total/max*100)}%;background:${x.person.color}"></i></div></article>`).join("")}</section>
-      <section class="kanban-col"><h3>Alertas</h3>${data.conflicts ? data.range.flatMap(d=>d.shifts.map(s=>({d,s}))).filter(x=>x.s.conflict).slice(0,8).map(x=>`<article class="kanban-card"><b>${fmt(x.d.date)} · ${shiftName(x.s.shift)}</b><span>${x.s.conflict}</span></article>`).join("") : `<article class="kanban-card"><b>Sin conflictos</b><span>El reparto no muestra alertas.</span></article>`}</section>
-      <section class="kanban-col"><h3>Próximos 7 días</h3>${scheduleRange(new Date(),7).flatMap(d=>d.shifts.map(s=>({d,s}))).slice(0,9).map(x=>`<article class="kanban-card"><b>${fmt(x.d.date)} · ${shiftName(x.s.shift)}</b><span>${x.s.person ? x.s.person.name : "Sin cubrir"}</span></article>`).join("")}</section>
-      <section class="kanban-col"><h3>Estado</h3><article class="kanban-card"><b>${state.proposal ? "Propuesta pendiente" : "Reparto activo"}</b><span>${state.proposal ? "Hay una propuesta sin aplicar." : "Calendario calculado con variables actuales."}</span></article><article class="kanban-card"><b>${state.rulesEnabled ? "Variables activas" : "Variables desactivadas"}</b><span>${state.config.customVariables.length} variables personalizadas.</span></article></section>`;
-    if(inbox){
-      inbox.classList.add('compact');
-      inbox.innerHTML = `
-        <article class="inbox-item ${data.conflicts ? 'bad' : ''}"><i class="inbox-dot"></i><div><b>${data.conflicts || 0} alertas</b><span>Conflictos o turnos pendientes.</span></div></article>
-        <article class="inbox-item"><i class="inbox-dot"></i><div><b>${state.people.filter(p=>p.blocked).length} bloqueos</b><span>Personas no disponibles.</span></div></article>
-        <article class="inbox-item warn"><i class="inbox-dot"></i><div><b>${state.proposal ? 'Revisar propuesta' : 'Sin propuesta'}</b><span>${state.proposal ? 'Aprobar o recalcular reparto.' : 'Puedes generar reparto justo.'}</span></div></article>`;
-    }
-  }
-
-
   function setupMobileTools(){
     const filters = document.querySelector(".agenda-tools");
     const reparto = document.querySelector(".agenda-reparto");
@@ -996,7 +941,6 @@
     renderVariables();
     renderPeople();
     renderApprovalPanel();
-    renderDashboard();
   }
 
   bind();
