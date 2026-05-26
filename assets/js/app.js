@@ -1,5 +1,4 @@
 
-
 (() => {
   "use strict";
 
@@ -42,7 +41,6 @@
   let selectedDate = new Date();
   selectedDate.setHours(12,0,0,0);
   let currentView = "month";
-  let displayMode = "calendar";
   let filterPerson = "all";
   let filterShift = "all";
   let selectedMonthDate = new Date(selectedDate);
@@ -263,11 +261,10 @@
       }
     }
     $$(".view-btn").forEach(b=>b.classList.toggle("active", b.dataset.view===currentView));
-    $$(".mode-btn").forEach(b=>b.classList.toggle("active", b.dataset.mode===displayMode));
     const cal = $("#calendar");
-    if(displayMode === "list"){ renderList(cal); return; }
     if(currentView === "week") renderWeek(cal);
     if(currentView === "day") renderDay(cal);
+    if(currentView === "list") renderList(cal);
     if(currentView === "month") renderMonth(cal);
     if(currentView === "year") renderYear(cal);
   }
@@ -291,23 +288,11 @@
   }
 
   function renderList(cal){
-    let days;
-    if(currentView === "day") days = [selectedDate];
-    else if(currentView === "week") days = Array.from({length:7},(_,i)=>addDays(startWeek(selectedDate),i));
-    else if(currentView === "year"){
-      const start = new Date(selectedDate.getFullYear(),0,1,12);
-      const end = new Date(selectedDate.getFullYear()+1,0,1,12);
-      const n = Math.round((end-start)/(24*3600*1000));
-      days = Array.from({length:n},(_,i)=>addDays(start,i));
-    }else{
-      const first = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1, 12);
-      const last = new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 0, 12);
-      days = Array.from({length:last.getDate()},(_,i)=>addDays(first,i));
-    }
-    let rows = days.flatMap(day => shiftsFor(day).map(s => ({date:day, shift:s, ...assign(day,s)})));
+    const days = scheduleRange(selectedDate,35);
+    let rows = days.flatMap(day => day.shifts.map(s => ({date:day.date, ...s})));
     rows = rows.filter(r => (filterShift === "all" || r.shift === filterShift) && (filterPerson === "all" || (r.person && r.person.id === filterPerson)));
     cal.innerHTML = `<table class="list-table"><thead><tr><th>Fecha</th><th>Turno</th><th>Persona</th><th>Regla</th><th>Acción</th></tr></thead><tbody>
-      ${rows.map(r=>`<tr><td>${fmt(r.date)}</td><td>${shiftName(r.shift)}</td><td>${r.person ? r.person.name : "Sin cubrir"}</td><td>${r.rule}</td><td><button class="btn small" data-override="${iso(r.date)}:${r.shift}">Cambiar</button></td></tr>`).join("") || `<tr><td colspan="5">Sin turnos con estos filtros.</td></tr>`}
+      ${rows.map(r=>`<tr><td>${fmt(r.date)}</td><td>${r.shift}</td><td>${r.person ? r.person.name : "Sin cubrir"}</td><td>${r.rule}</td><td><button class="btn small" data-override="${iso(r.date)}:${r.shift}">Cambiar</button></td></tr>`).join("")}
     </tbody></table>`;
   }
 
@@ -835,7 +820,6 @@
     const menu = $("#menuBtn"), links = $("#navLinks");
     if(menu && links) menu.addEventListener("click",()=>links.classList.toggle("open"));
     $$(".view-btn").forEach(b=>b.addEventListener("click",()=>{ currentView=b.dataset.view; renderAgenda(); }));
-    $$(".mode-btn").forEach(b=>b.addEventListener("click",()=>{ displayMode=b.dataset.mode; renderAgenda(); }));
     $("#personFilter")?.addEventListener("change",e=>{ filterPerson = e.target.value; renderAgenda(); });
     $("#shiftFilter")?.addEventListener("change",e=>{ filterShift = e.target.value; renderAgenda(); });
     $("#prevPeriod")?.addEventListener("click",()=>{
@@ -956,38 +940,4 @@ document.addEventListener("click", function(e){
     var nav = document.getElementById("navLinks");
     if(nav) nav.classList.remove("open");
   }
-});
-
-
-
-
-(function(){
-  const STORE='cuidados-turnos-v1';
-  const PIN='1234';
-  const $=(s,r=document)=>r.querySelector(s);
-  function open(el){el&&el.classList.add('open')}
-  function closeAll(){document.querySelectorAll('.bulma-modal.open').forEach(m=>m.classList.remove('open'))}
-  function data(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){return {}}}
-  function download(name,content,type){const blob=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
-  function toast(msg){const old=$('.toast');if(old)old.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2000)}
-  document.addEventListener('click',e=>{
-    if(e.target.closest('[data-open-settings]')){open($('#settingsLock'));setTimeout(()=>$('#settingsPin')&&$('#settingsPin').focus(),80)}
-    if(e.target.closest('[data-close-settings]')) closeAll();
-    if(e.target.closest('#unlockSettings')){ if(($('#settingsPin')||{}).value===PIN){closeAll();open($('#settingsModal'))} else toast('Clave incorrecta'); }
-    if(e.target.closest('[data-settings-export-json]')) download('agenda-cuidados-backup.json',JSON.stringify(data(),null,2),'application/json');
-    if(e.target.closest('[data-settings-export-csv]')){
-      const s=data(); const rows=['tipo,fecha,turno,persona,regla'];
-      Object.entries(s.manual||{}).forEach(([k,v])=>{const parts=k.split(':');rows.push(['manual',parts[0],parts[1],v,''].map(x=>'"'+String(x||'').replaceAll('"','""')+'"').join(','))});
-      (s.people||[]).forEach(p=>rows.push(['persona','','',p.name,p.blocked?'bloqueada':'activa'].map(x=>'"'+String(x||'').replaceAll('"','""')+'"').join(',')));
-      download('agenda-cuidados.csv',rows.join('\n'),'text/csv;charset=utf-8');
-    }
-    if(e.target.closest('[data-settings-reset]')){if(confirm('¿Restaurar datos iniciales?')){localStorage.removeItem(STORE);location.reload()}}
-  });
-  $('#settingsImport')&&$('#settingsImport').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{JSON.parse(r.result);localStorage.setItem(STORE,r.result);toast('Backup importado');setTimeout(()=>location.reload(),650)}catch(err){toast('JSON no válido')}};r.readAsText(f)});
-})();
-
-document.addEventListener('DOMContentLoaded',()=>{
-  const page=document.documentElement.dataset.page;
-  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active', a.dataset.nav===page));
-  document.querySelectorAll('[data-print]').forEach(b=>b.addEventListener('click',()=>window.print()));
 });

@@ -1,0 +1,22 @@
+{
+  "source": "agenda-cuidados-turnos-formato-separado-nav-calendario(1).zip",
+  "files": [
+    "QA_MENU_REPARTO.json",
+    "QA_RESPONSIVE.json",
+    "README.md",
+    "assets/css/app.css",
+    "assets/data/schema.json",
+    "assets/js/app.js",
+    "index.html",
+    "manifest.webmanifest",
+    "personas.html",
+    "variables.html"
+  ],
+  "checks": {
+    "index_has_mode_buttons": true,
+    "settings_footer": true,
+    "people_modal": true,
+    "dashboard": true,
+    "single_people_wording": true
+  }
+}

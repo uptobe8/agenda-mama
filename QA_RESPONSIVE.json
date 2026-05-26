@@ -1,0 +1,19 @@
+{
+  "validated_static": true,
+  "javascript": "node --check OK",
+  "pages": [
+    "index.html",
+    "variables.html",
+    "personas.html"
+  ],
+  "device_hardening": [
+    "CSS y JS incrustados en cada HTML para evitar carga rota de assets",
+    "safe-area para iPhone con notch/isla dinámica",
+    "scroll horizontal táctil en semana",
+    "inputs a 16px para evitar zoom automático en iOS",
+    "breakpoints 1050, 760, 480 y 360px",
+    "bottom nav móvil",
+    "sin dependencia obligatoria de Google Fonts"
+  ],
+  "note": "No sustituye una prueba física en cada marca y modelo existente."
+}
