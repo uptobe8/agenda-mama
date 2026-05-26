@@ -1,16 +1,22 @@
-# Agenda de Cuidados Completa con Turnos
+# Agenda de cuidados
 
-App multiarchivo para GitHub Pages.
+App estática para GitHub Pages.
 
-Incluye agenda diaria, medicación, seguimiento, persona cuidada, personas/cuidadores, turnos familiares, reglas de reparto, propuesta/aprobación de turnos, informes y backups.
+## Secciones
+- Agenda: portada con calendario semanal de inicio y cambio a día, lista o anual.
+- Variables: modificar reglas, incluir variables y eliminar variables.
+- Personas: añadir, eliminar o bloquear personas encargadas de turnos.
 
-Personas y cuidadores son el mismo listado.
+## Datos
+Los datos se guardan en localStorage del navegador.
+Incluye exportación JSON, importación JSON y CSV.
 
-Los datos se guardan en IndexedDB dentro del navegador.
-
-
-## Temas Bulma-style
-- Tema como colección de variables CSS.
-- Soporte de `data-theme`: system, light, dark, calm y contrast.
-- Respeta `prefers-color-scheme` en modo Sistema.
-- Selector global en la barra superior y panel visual en Ajustes.
+## Reglas iniciales
+- Se separan tardes y noches.
+- Todas las noches alguien.
+- Martes y jueves tarde: Mari José.
+- Miércoles tarde: Bea.
+- Lunes y viernes tarde alternan Marta y Patri.
+- Sábado día, sábado noche y domingo día: una persona del tirón por fin de semana.
+- Lunes y viernes duerme quien esté de tarde.
+- Domingo noche, martes noche y jueves noche: rotación editable.
