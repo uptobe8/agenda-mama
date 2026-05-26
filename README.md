@@ -1,17 +1,28 @@
-# Agenda de cuidados · versión base con patrones Bulma aplicados
+# Agenda de cuidados
 
-Base principal: agenda-cuidados-turnos-formato-separado-nav-calendario.
+App estática para GitHub Pages.
 
-Aplicado:
-- Una sola agenda en Home.
-- Formato separado de vista: Día, Semana, Mes, Anual + Calendario/Lista.
-- Ancho ampliado para que la agenda no quede encajonada.
-- Personas y cuidadores unificados como `Personas`.
-- Personas en formato Cards + Modal Cards.
-- Dashboard en Home con patrón Admin/Reportz.
-- Actividad y avisos tipo Inbox.
-- Resumen Kanban de estados de personas/propuesta.
-- Ajustes fuera del menú, en footer con clave.
-- Clave inicial de ajustes: 1234.
+## Secciones
+- Agenda: portada con calendario semanal de inicio y cambio a día, lista o anual.
+- Variables: modificar reglas, incluir variables y eliminar variables.
+- Personas: añadir, eliminar o bloquear personas encargadas de turnos.
 
-Datos: localStorage bajo la clave `cuidados-turnos-v1`.
+## Datos
+Los datos se guardan en localStorage del navegador.
+Incluye exportación JSON, importación JSON y CSV.
+
+## Reglas iniciales
+- Se separan tardes y noches.
+- Todas las noches alguien.
+- Martes y jueves tarde: Mari José.
+- Miércoles tarde: Bea.
+- Lunes y viernes tarde alternan Marta y Patri.
+- Sábado día, sábado noche y domingo día: una persona del tirón por fin de semana.
+- Lunes y viernes duerme quien esté de tarde.
+- Domingo noche, martes noche y jueves noche: rotación editable.
+
+
+## Ajustes aplicados
+- Tema visual Calma por defecto.
+- Home/agenda abre por defecto en vista semanal.
+- Tipografía Lato con fallback Helvetica.
