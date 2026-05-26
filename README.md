@@ -1,28 +1,9 @@
-# Agenda de cuidados
+# Agenda de cuidados completa
 
-App estática para GitHub Pages.
-
-## Secciones
-- Agenda: portada con calendario semanal de inicio y cambio a día, lista o anual.
-- Variables: modificar reglas, incluir variables y eliminar variables.
-- Personas: añadir, eliminar o bloquear personas encargadas de turnos.
-
-## Datos
-Los datos se guardan en localStorage del navegador.
-Incluye exportación JSON, importación JSON y CSV.
-
-## Reglas iniciales
-- Se separan tardes y noches.
-- Todas las noches alguien.
-- Martes y jueves tarde: Mari José.
-- Miércoles tarde: Bea.
-- Lunes y viernes tarde alternan Marta y Patri.
-- Sábado día, sábado noche y domingo día: una persona del tirón por fin de semana.
-- Lunes y viernes duerme quien esté de tarde.
-- Domingo noche, martes noche y jueves noche: rotación editable.
-
-
-## Ajustes aplicados
-- Tema visual Calma por defecto.
-- Home/agenda abre por defecto en vista semanal.
-- Tipografía Lato con fallback Helvetica.
+Versión corregida:
+- Una sola agenda en la home con vistas Día, Semana, Lista y Turnos.
+- Personas unifica persona cuidada, familiares y equipo. No hay módulo separado adicional.
+- Turnos queda como configuración/reparto, no como segunda agenda.
+- Ajustes se abren desde el footer con clave local: 1234.
+- BBDD interna IndexedDB y backup JSON/CSV.
+- Temas y componentes inspirados en Bulma: variables CSS, dark mode, cards, modal, tabs, notification, paneles, tablas, tags, progreso, helpers responsive.
