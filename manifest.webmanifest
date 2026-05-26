@@ -1,9 +1,0 @@
-{
-  "name": "Agenda de cuidados",
-  "short_name": "Cuidados",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#f5f7fb",
-  "theme_color": "#3657ff",
-  "icons": []
-}
