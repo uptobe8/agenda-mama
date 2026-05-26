@@ -1,0 +1,12 @@
+{
+  "source_zip": "agenda-cuidados-turnos-profesional-unificado.zip",
+  "js_node_check": true,
+  "bulma_theme_css": true,
+  "bulma_theme_js": true,
+  "theme_switch_all_pages": true,
+  "bulma_scopes_present": true,
+  "nav_links_still_present": true,
+  "turnos_pages_present": true,
+  "care_pages_present": true,
+  "sw_updated": true
+}

@@ -1,0 +1,11 @@
+{
+  "js_valid": true,
+  "professional_base_css": true,
+  "turnos_module": true,
+  "pages_present": true,
+  "nav_has_new_pages": true,
+  "agenda_buttons": true,
+  "variables_form": true,
+  "people_form": true,
+  "pwa_files": true
+}
